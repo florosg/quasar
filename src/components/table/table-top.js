@@ -35,6 +35,7 @@ export default {
       else {
         if (topLeft) {
           child.push(
+            // FLOROSG
             h('div', { staticClass: 'q-table-control left' }, [
               topLeft(this.marginalsProps)
             ])
@@ -52,6 +53,7 @@ export default {
       if (topRight) {
         child.push(h('div', { staticClass: 'q-table-separator col' }))
         child.push(
+          // FLOROSG
           h('div', { staticClass: 'q-table-control right' }, [
             topRight(this.marginalsProps)
           ])

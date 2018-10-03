@@ -265,6 +265,8 @@ export default {
       this.$emit('input', value)
       this.$nextTick(() => {
         if (JSON.stringify(value) !== JSON.stringify(this.value)) {
+          //FLOROSG
+          this.value = value;
           this.$emit('change', value)
         }
       })

@@ -6545,6 +6545,8 @@
         this.$emit('input', value);
         this.$nextTick(function () {
           if (JSON.stringify(value) !== JSON.stringify(this$1.value)) {
+            // FLOROSG
+            this$1.value = value;
             this$1.$emit('change', value);
           }
         });
@@ -16985,6 +16987,8 @@
         this.$emit('input', value);
         this.$nextTick(function () {
           if (JSON.stringify(value) !== JSON.stringify(this$1.value)) {
+            //FLOROSG
+            this$1.value = value;
             this$1.$emit('change', value);
           }
         });
@@ -20389,6 +20393,7 @@
         else {
           if (topLeft) {
             child.push(
+              // FLOROSG
               h('div', { staticClass: 'q-table-control left' }, [
                 topLeft(this.marginalsProps)
               ])
@@ -20406,6 +20411,7 @@
         if (topRight) {
           child.push(h('div', { staticClass: 'q-table-separator col' }));
           child.push(
+            // FLOROSG
             h('div', { staticClass: 'q-table-control right' }, [
               topRight(this.marginalsProps)
             ])
