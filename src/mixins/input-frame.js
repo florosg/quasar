@@ -1,5 +1,6 @@
 import { stopAndPrevent } from '../utils/event.js'
 import AlignMixin from './align.js'
+import LabelMixins from './label.js'
 
 const marginal = {
   type: Array,
@@ -7,7 +8,7 @@ const marginal = {
 }
 
 export default {
-  mixins: [AlignMixin],
+  mixins: [LabelMixins, AlignMixin],
   props: {
     prefix: String,
     suffix: String,
