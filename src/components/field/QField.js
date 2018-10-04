@@ -1,9 +1,9 @@
 import QIcon from '../icon/QIcon.js'
 import CanRenderMixin from '../../mixins/can-render.js'
-
+import LabelMixin from '../../mixins/label.js'
 export default {
   name: 'QField',
-  mixins: [ CanRenderMixin ],
+  mixins: [LabelMixin, CanRenderMixin ],
   props: {
     inset: {
       type: String,
@@ -128,13 +128,13 @@ export default {
       let label
 
       if (this.hasError && (label = this.$slots['error-label'] || this.errorLabel)) {
-        return h('div', { staticClass: 'q-field-error col' }, label)
+        return h('div', { staticClass: 'q-field-error col' }, this.getLabelValue(label))
       }
       if (this.hasWarning && (label = this.$slots['warning-label'] || this.warningLabel)) {
-        return h('div', { staticClass: 'q-field-warning col' }, label)
+        return h('div', { staticClass: 'q-field-warning col' }, this.getLabelValue(label))
       }
       if ((label = this.$slots.helper || this.helper)) {
-        return h('div', { staticClass: 'q-field-helper col' }, label)
+        return h('div', { staticClass: 'q-field-helper col' }, this.getLabelValue(label))
       }
       return h('div', { staticClass: 'col text-transparent' }, ['|'])
     },
@@ -145,8 +145,11 @@ export default {
         this.count
     }
   },
+  //FLOROSG
   render (h) {
-    const label = this.$slots.label || this.label
+
+    //FLOROSG
+    const label = this.getLabelValue(this.$slots.label || this.label)
 
     return h('div', {
       staticClass: 'q-field row no-wrap items-start',
@@ -166,7 +169,7 @@ export default {
             'class': this.labelClasses
           }, [
             h('div', { staticClass: 'q-field-label-inner row items-center' }, [
-              this.$slots.label || this.label
+              label
             ])
           ])
           : null,
