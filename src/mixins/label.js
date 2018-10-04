@@ -6,7 +6,7 @@ export default {
      * @param {string|function}label
      */
     getLabelValue (label) {
-      return typeof label === 'function' ? label() : label ;
+      return label && typeof label === 'function' ? label() : label ;
     }
   }
 }
