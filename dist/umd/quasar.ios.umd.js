@@ -3066,7 +3066,7 @@
        * @param {string|function}label
        */
       getLabelValue: function getLabelValue (label) {
-        return typeof label === 'function' ? label() : label ;
+        return label && typeof label === 'function' ? label() : label ;
       }
     }
   };
@@ -6796,7 +6796,7 @@
   };
 
   var FrameMixin = {
-    mixins: [AlignMixin],
+    mixins: [LabelMixins, AlignMixin],
     props: {
       prefix: String,
       suffix: String,
@@ -17212,7 +17212,7 @@
         ref: 'input',
         staticClass: 'q-select',
         props: {
-          prefix: this.getLabelValue(this.prefix),
+          prefix: this.getLabzelValue(this.prefix),
           suffix: this.getLabelValue(this.suffix),
           stackLabel: this.getLabelValue(this.stackLabel),
           floatLabel: this.getLabelValue(this.floatLabel),
