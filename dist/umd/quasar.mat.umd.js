@@ -13304,7 +13304,7 @@
 
   var QField = {
     name: 'QField',
-    mixins: [ CanRenderMixin ],
+    mixins: [LabelMixins, CanRenderMixin ],
     props: {
       inset: {
         type: String,
@@ -13429,13 +13429,13 @@
         var label;
 
         if (this.hasError && (label = this.$slots['error-label'] || this.errorLabel)) {
-          return h('div', { staticClass: 'q-field-error col' }, label)
+          return h('div', { staticClass: 'q-field-error col' }, this.getLabelValue(label))
         }
         if (this.hasWarning && (label = this.$slots['warning-label'] || this.warningLabel)) {
-          return h('div', { staticClass: 'q-field-warning col' }, label)
+          return h('div', { staticClass: 'q-field-warning col' }, this.getLabelValue(label))
         }
         if ((label = this.$slots.helper || this.helper)) {
-          return h('div', { staticClass: 'q-field-helper col' }, label)
+          return h('div', { staticClass: 'q-field-helper col' }, this.getLabelValue(label))
         }
         return h('div', { staticClass: 'col text-transparent' }, ['|'])
       },
@@ -13446,8 +13446,11 @@
           this.count
       }
     },
+    //FLOROSG
     render: function render (h) {
-      var label = this.$slots.label || this.label;
+
+      //FLOROSG
+      var label = this.getLabelValue(this.$slots.label || this.label);
 
       return h('div', {
         staticClass: 'q-field row no-wrap items-start',
@@ -13467,7 +13470,7 @@
               'class': this.labelClasses
             }, [
               h('div', { staticClass: 'q-field-label-inner row items-center' }, [
-                this.$slots.label || this.label
+                label
               ])
             ])
             : null,
