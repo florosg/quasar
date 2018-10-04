@@ -17212,7 +17212,7 @@
         ref: 'input',
         staticClass: 'q-select',
         props: {
-          prefix: this.getLabzelValue(this.prefix),
+          prefix: this.getLabelValue(this.prefix),
           suffix: this.getLabelValue(this.suffix),
           stackLabel: this.getLabelValue(this.stackLabel),
           floatLabel: this.getLabelValue(this.floatLabel),
