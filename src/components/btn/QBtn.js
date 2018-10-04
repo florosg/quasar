@@ -193,7 +193,7 @@ export default {
             })
             : null,
 
-          this.label && this.isRectangle ? h('div', [ this.label ]) : null,
+          this.label && this.isRectangle ? h('div', [this.getLabelValue(this.label) ]) : null,
 
           this.$slots.default,
 

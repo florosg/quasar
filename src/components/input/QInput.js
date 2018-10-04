@@ -7,10 +7,10 @@ import QResizeObservable from '../observables/QResizeObservable.js'
 import QInputFrame from '../input-frame/QInputFrame.js'
 import QSpinner from '../spinner/QSpinner.js'
 import QIcon from '../icon/QIcon.js'
-
+import LabelMixin from '../../mixins/label'
 export default {
   name: 'QInput',
-  mixins: [FrameMixin, InputMixin],
+  mixins: [LabelMixin, FrameMixin, InputMixin],
   props: {
     value: { required: true },
     type: {
@@ -128,14 +128,14 @@ export default {
     computedStep () {
       return this.step || (this.decimals ? 10 ** -this.decimals : 'any')
     },
-
+  //FLOROSG
     frameProps () {
       return {
-        prefix: this.prefix,
-        suffix: this.suffix,
-        stackLabel: this.stackLabel,
-        floatLabel: this.floatLabel,
-        placeholder: this.placeholder,
+        prefix: this.getLabelValue(this.prefix),
+        suffix: this.getLabelValue(this.suffix),
+        stackLabel: this.getLabelValue(this.stackLabel),
+        floatLabel: this.getLabelValue(this.floatLabel),
+        placeholder: this.getLabelValue(this.placeholder),
         error: this.error,
         warning: this.warning,
         disable: this.disable,

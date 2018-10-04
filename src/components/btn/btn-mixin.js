@@ -1,5 +1,6 @@
 import Ripple from '../../directives/ripple.js'
 import AlignMixin from '../../mixins/align.js'
+import LabelMixin from '../../mixins/label.js'
 
 const sizes = {
   xs: 8,
@@ -14,7 +15,7 @@ const sizes = {
 }
 
 export default {
-  mixins: [AlignMixin],
+  mixins: [LabelMixin, AlignMixin],
   directives: {
     Ripple
   },

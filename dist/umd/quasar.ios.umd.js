@@ -3058,6 +3058,19 @@
     }
   };
 
+  var LabelMixins = {
+
+    methods: {
+      /**
+       * Check if the label is function or string
+       * @param {string|function}label
+       */
+      getLabelValue: function getLabelValue (label) {
+        return typeof label === 'function' ? label() : label ;
+      }
+    }
+  };
+
   var sizes = {
     xs: 8,
     sm: 10,
@@ -3071,7 +3084,7 @@
   };
 
   var BtnMixin = {
-    mixins: [AlignMixin],
+    mixins: [LabelMixins, AlignMixin],
     directives: {
       Ripple: Ripple
     },
@@ -3632,7 +3645,7 @@
               })
               : null,
 
-            this.label && this.isRectangle ? h('div', [ this.label ]) : null,
+            this.label && this.isRectangle ? h('div', [this.getLabelValue(this.label) ]) : null,
 
             this.$slots.default,
 
@@ -6482,6 +6495,7 @@
   };
 
   var OptionMixin = {
+    mixins:[LabelMixins ],
     props: {
       value: {
         required: true
@@ -6545,11 +6559,11 @@
         this.$emit('input', value);
         this.$nextTick(function () {
           if (JSON.stringify(value) !== JSON.stringify(this$1.value)) {
-            this$1.$emit('change', value);
+            this$1.$emit('change', value) ;
 
             // FLOROSG
-            this$1.$nextTick(function (){
-              this$1.value = value;
+            this$1.$nextTick(function () {
+              this$1.value = value ;
             });
           }
         });
@@ -6601,7 +6615,7 @@
         this.label
           ? h('span', {
             staticClass: 'q-option-label',
-            domProps: { innerHTML: this.label }
+            domProps: { innerHTML: this.getLabelValue(this.label)}
           })
           : null,
 
@@ -10754,7 +10768,7 @@
 
   var QInput = {
     name: 'QInput',
-    mixins: [FrameMixin, InputMixin],
+    mixins: [LabelMixins, FrameMixin, InputMixin],
     props: {
       value: { required: true },
       type: {
@@ -10874,14 +10888,14 @@
       computedStep: function computedStep () {
         return this.step || (this.decimals ? Math.pow( 10, -this.decimals ) : 'any')
       },
-
+    //FLOROSG
       frameProps: function frameProps () {
         return {
-          prefix: this.prefix,
-          suffix: this.suffix,
-          stackLabel: this.stackLabel,
-          floatLabel: this.floatLabel,
-          placeholder: this.placeholder,
+          prefix: this.getLabelValue(this.prefix),
+          suffix: this.getLabelValue(this.suffix),
+          stackLabel: this.getLabelValue(this.stackLabel),
+          floatLabel: this.getLabelValue(this.floatLabel),
+          placeholder: this.getLabelValue(this.placeholder),
           error: this.error,
           warning: this.warning,
           disable: this.disable,
@@ -17193,14 +17207,15 @@
         props: { name: this.$q.icon.input.dropdown }
       }));
 
+      //FLOROSG todo make computed props?
       return h(QInputFrame, {
         ref: 'input',
         staticClass: 'q-select',
         props: {
-          prefix: this.prefix,
-          suffix: this.suffix,
-          stackLabel: this.stackLabel,
-          floatLabel: this.floatLabel,
+          prefix: this.getLabelValue(this.prefix),
+          suffix: this.getLabelValue(this.suffix),
+          stackLabel: this.getLabelValue(this.stackLabel),
+          floatLabel: this.getLabelValue(this.floatLabel),
           error: this.error,
           warning: this.warning,
           disable: this.disable,

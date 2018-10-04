@@ -466,14 +466,15 @@ export default {
       props: { name: this.$q.icon.input.dropdown }
     }))
 
+    //FLOROSG todo make computed props?
     return h(QInputFrame, {
       ref: 'input',
       staticClass: 'q-select',
       props: {
-        prefix: this.prefix,
-        suffix: this.suffix,
-        stackLabel: this.stackLabel,
-        floatLabel: this.floatLabel,
+        prefix: this.getLabelValue(this.prefix),
+        suffix: this.getLabelValue(this.suffix),
+        stackLabel: this.getLabelValue(this.stackLabel),
+        floatLabel: this.getLabelValue(this.floatLabel),
         error: this.error,
         warning: this.warning,
         disable: this.disable,

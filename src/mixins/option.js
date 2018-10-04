@@ -1,6 +1,7 @@
 import { getEventKey } from '../utils/event.js'
-
+import LabelMixins from './label.js'
 export default {
+  mixins:[LabelMixins ],
   props: {
     value: {
       required: true
@@ -62,11 +63,11 @@ export default {
       this.$emit('input', value)
       this.$nextTick(() => {
         if (JSON.stringify(value) !== JSON.stringify(this.value)) {
-          this.$emit('change', value)
+          this.$emit('change', value) ;
 
           // FLOROSG
-          this.$nextTick(()=>{
-            this.value = value;
+          this.$nextTick(() => {
+            this.value = value ;
           })
         }
       })
@@ -116,7 +117,7 @@ export default {
       this.label
         ? h('span', {
           staticClass: 'q-option-label',
-          domProps: { innerHTML: this.label }
+          domProps: { innerHTML: this.getLabelValue(this.label)}
         })
         : null,
 
