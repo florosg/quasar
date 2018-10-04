@@ -6330,9 +6330,12 @@
         this.$emit('input', value);
         this.$nextTick(function () {
           if (JSON.stringify(value) !== JSON.stringify(this$1.value)) {
-            // FLOROSG
-            this$1.value = value;
             this$1.$emit('change', value);
+
+            // FLOROSG
+            this$1.$nextTick(function (){
+              this$1.value = value;
+            });
           }
         });
       },
@@ -17334,9 +17337,11 @@
         this.$emit('input', value);
         this.$nextTick(function () {
           if (JSON.stringify(value) !== JSON.stringify(this$1.value)) {
-            //FLOROSG
-            this$1.value = value;
             this$1.$emit('change', value);
+            // FLOROSG
+            this$1.$nextTick(function (){
+              this$1.value = value;
+            });
           }
         });
       },
