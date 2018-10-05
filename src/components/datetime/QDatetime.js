@@ -173,6 +173,10 @@ export default {
           this.$emit('input', this.model)
           if (change) {
             this.$emit('change', this.model)
+            // FLOROSG
+            this.$nextTick(() => {
+               this.value = this.model
+            })
           }
         }
       })
@@ -262,6 +266,7 @@ export default {
     }
   },
   render (h) {
+    // console.log('QDateTime is rendering b');
     return h(QInputFrame, {
       staticClass: 'q-datetime-input',
       props: {

@@ -10480,6 +10480,10 @@
             this$1.$emit('input', this$1.model);
             if (change) {
               this$1.$emit('change', this$1.model);
+              // FLOROSG
+              this$1.$nextTick(function () {
+                 this$1.value = this$1.model;
+              });
             }
           }
         });
@@ -10569,6 +10573,7 @@
     render: function render (h) {
       var this$1 = this;
 
+      // console.log('QDateTime is rendering b');
       return h(QInputFrame, {
         staticClass: 'q-datetime-input',
         props: {
