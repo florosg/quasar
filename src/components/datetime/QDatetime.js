@@ -1,6 +1,8 @@
+//FLOROSG
 import FrameMixin from '../../mixins/input-frame.js'
 import DisplayModeMixin from '../../mixins/display-mode.js'
 import CanRenderMixin from '../../mixins/can-render.js'
+import LabelMixins from '../../mixins/label.js'
 import { input, inline } from './datetime-props.js'
 import QInputFrame from '../input-frame/QInputFrame.js'
 import QIcon from '../icon/QIcon.js'
@@ -22,10 +24,11 @@ const contentCss = process.env.THEME === 'ios'
     maxWidth: '95vw',
     maxHeight: '98vh'
   }
+//FLOROSG
 
 export default {
   name: 'QDatetime',
-  mixins: [FrameMixin, DisplayModeMixin, CanRenderMixin],
+  mixins: [LabelMixins ,FrameMixin, DisplayModeMixin, CanRenderMixin],
   props: Object.assign({}, input, inline),
   watch: {
     value (v) {
@@ -60,7 +63,7 @@ export default {
     },
     actualValue () {
       if (this.displayValue) {
-        return this.displayValue
+        return this.getLabelValue(this.displayValue) ;
       }
       if (!isValid(this.value) || !this.canRender) {
         return ''
@@ -193,7 +196,7 @@ export default {
             type: this.type,
             min: this.min,
             max: this.max,
-            headerLabel: this.headerLabel,
+            headerLabel: this.getLabelValue(this.headerLabel),
             minimal: this.minimal,
             formatModel: this.formatModel,
             format24h: this.format24h,
@@ -215,6 +218,7 @@ export default {
             }
           }
         }, [
+          //FLOROSG
           modal
             ? h('div', {
               staticClass: 'modal-buttons modal-buttons-top row full-width'
@@ -224,7 +228,7 @@ export default {
                 props: {
                   color: this.modalBtnColor,
                   flat: true,
-                  label: this.cancelLabel || this.$q.i18n.label.cancel,
+                  label: this.getLabelValue(this.cancelLabel) || this.$q.i18n.label.cancel,
                   noRipple: true
                 },
                 on: {
@@ -239,7 +243,7 @@ export default {
                   props: {
                     color: this.modalBtnColor,
                     flat: true,
-                    label: this.okLabel || this.$q.i18n.label.set,
+                    label: this.getLabelValue(this.okLabel) || this.$q.i18n.label.set,
                     noRipple: true,
                     disable: !this.model
                   },

@@ -10672,14 +10672,17 @@
     }
   };
 
+  //FLOROSG
+
   var contentCss$1 = {
       maxWidth: '95vw',
       maxHeight: '98vh'
     };
+  //FLOROSG
 
   var QDatetime = {
     name: 'QDatetime',
-    mixins: [FrameMixin, DisplayModeMixin, CanRenderMixin],
+    mixins: [LabelMixins ,FrameMixin, DisplayModeMixin, CanRenderMixin],
     props: Object.assign({}, input, inline),
     watch: {
       value: function value (v) {
@@ -10714,7 +10717,7 @@
       },
       actualValue: function actualValue () {
         if (this.displayValue) {
-          return this.displayValue
+          return this.getLabelValue(this.displayValue) ;
         }
         if (!isValid(this.value) || !this.canRender) {
           return ''
@@ -10848,7 +10851,7 @@
               type: this.type,
               min: this.min,
               max: this.max,
-              headerLabel: this.headerLabel,
+              headerLabel: this.getLabelValue(this.headerLabel),
               minimal: this.minimal,
               formatModel: this.formatModel,
               format24h: this.format24h,
@@ -10870,6 +10873,7 @@
               }
             }
           }, [
+            //FLOROSG
             modal
               ? h('div', {
                 staticClass: 'modal-buttons modal-buttons-top row full-width'
@@ -10879,7 +10883,7 @@
                   props: {
                     color: this.modalBtnColor,
                     flat: true,
-                    label: this.cancelLabel || this.$q.i18n.label.cancel,
+                    label: this.getLabelValue(this.cancelLabel) || this.$q.i18n.label.cancel,
                     noRipple: true
                   },
                   on: {
@@ -10894,7 +10898,7 @@
                     props: {
                       color: this.modalBtnColor,
                       flat: true,
-                      label: this.okLabel || this.$q.i18n.label.set,
+                      label: this.getLabelValue(this.okLabel) || this.$q.i18n.label.set,
                       noRipple: true,
                       disable: !this.model
                     },
