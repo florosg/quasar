@@ -2229,6 +2229,19 @@
     }
   };
 
+  var LabelMixins = {
+
+    methods: {
+      /**
+       * Check if the label is function or string
+       * @param {string|function}label
+       */
+      getLabelValue: function getLabelValue (label) {
+        return label && typeof label === 'function' ? label() : label ;
+      }
+    }
+  };
+
   function textStyle (n) {
     return n === void 0 || n < 2
       ? {}
@@ -2251,7 +2264,7 @@
   };
 
   var ItemMixin = {
-    mixins: [{ props: routerLinkProps }],
+    mixins: [{ props: routerLinkProps }, LabelMixins],
     props: {
       dark: Boolean,
 
@@ -3054,19 +3067,6 @@
     computed: {
       alignClass: function alignClass () {
         return ("justify-" + (alignMap[this.align]))
-      }
-    }
-  };
-
-  var LabelMixins = {
-
-    methods: {
-      /**
-       * Check if the label is function or string
-       * @param {string|function}label
-       */
-      getLabelValue: function getLabelValue (label) {
-        return label && typeof label === 'function' ? label() : label ;
       }
     }
   };
@@ -4237,6 +4237,7 @@
 
   var QItemWrapper = {
     name: 'QItemWrapper',
+    mixins: [LabelMixins],
     props: {
       cfg: {
         type: Object,
@@ -4254,15 +4255,15 @@
         icon: cfg.icon,
         color: cfg.leftColor,
         avatar: cfg.avatar,
-        letter: cfg.letter,
+        letter: this.getLabelValue(cfg.letter),
         image: cfg.image,
         inverted: cfg.leftInverted,
         textColor: cfg.leftTextColor
       });
 
       push(child, h, QItemMain, this.$slots.main, replace, {
-        label: cfg.label,
-        sublabel: cfg.sublabel,
+        label: this.getLabelValue(cfg.label),
+        sublabel: this.getLabelValue(cfg.sublabel),
         labelLines: cfg.labelLines,
         sublabelLines: cfg.sublabelLines,
         inset: cfg.inset
@@ -4273,9 +4274,9 @@
         icon: cfg.rightIcon,
         color: cfg.rightColor,
         avatar: cfg.rightAvatar,
-        letter: cfg.rightLetter,
+        letter: this.getLabelValue(cfg.rightLetter),
         image: cfg.rightImage,
-        stamp: cfg.stamp,
+        stamp: this.getLabelValue(cfg.stamp),
         inverted: cfg.rightInverted,
         textColor: cfg.rightTextColor
       });
@@ -7166,7 +7167,7 @@
               staticClass: 'q-if-addon q-if-addon-left',
               'class': this.addonClass,
               domProps: {
-                innerHTML: this.prefix
+                innerHTML: this.getLabelValue(this.prefix)
               }
             })) || void 0,
 
@@ -7176,7 +7177,7 @@
             }, [
               h('div', {
                 staticClass: 'q-if-label-inner ellipsis',
-                domProps: { innerHTML: this.label }
+                domProps: { innerHTML: this.getLabelValue(this.label) }
               })
             ])) || void 0
           ].concat(this.$slots.default).concat([
@@ -7184,14 +7185,14 @@
               staticClass: 'q-if-addon q-if-addon-right',
               'class': this.addonClass,
               domProps: {
-                innerHTML: this.suffix
+                innerHTML: this.getLabelValue(this.suffix)
               }
             })) || void 0
           ])),
           (this.hasLabel && h('div', {
             staticClass: 'q-if-label-spacer',
             domProps: {
-              innerHTML: this.label
+              innerHTML: this.getLabelValue(this.label)
             }
           })) || void 0
         ]),
@@ -7734,6 +7735,7 @@
     mixins: [
       ModelToggleMixin,
       ItemMixin,
+      LabelMixins,
       { props: subItemProps }
     ],
     modelToggle: {

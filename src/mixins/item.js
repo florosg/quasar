@@ -1,4 +1,5 @@
 import { routerLinkProps } from '../utils/router-link.js'
+import LabelMixins from './label.js'
 
 export function textStyle (n) {
   return n === void 0 || n < 2
@@ -22,7 +23,7 @@ export const subItemProps = {
 }
 
 export default {
-  mixins: [{ props: routerLinkProps }],
+  mixins: [{ props: routerLinkProps }, LabelMixins],
   props: {
     dark: Boolean,
 

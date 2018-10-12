@@ -1,6 +1,7 @@
 import QItem from './QItem.js'
 import QItemMain from './QItemMain.js'
 import QItemSide from './QItemSide.js'
+import LabelMixins from '../../mixins/label.js'
 
 function push (child, h, name, slot, replace, conf) {
   const defaultProps = { props: { right: conf.right } }
@@ -26,6 +27,7 @@ function push (child, h, name, slot, replace, conf) {
 
 export default {
   name: 'QItemWrapper',
+  mixins: [LabelMixins],
   props: {
     cfg: {
       type: Object,
@@ -43,15 +45,15 @@ export default {
       icon: cfg.icon,
       color: cfg.leftColor,
       avatar: cfg.avatar,
-      letter: cfg.letter,
+      letter: this.getLabelValue(cfg.letter),
       image: cfg.image,
       inverted: cfg.leftInverted,
       textColor: cfg.leftTextColor
     })
 
     push(child, h, QItemMain, this.$slots.main, replace, {
-      label: cfg.label,
-      sublabel: cfg.sublabel,
+      label: this.getLabelValue(cfg.label),
+      sublabel: this.getLabelValue(cfg.sublabel),
       labelLines: cfg.labelLines,
       sublabelLines: cfg.sublabelLines,
       inset: cfg.inset
@@ -62,9 +64,9 @@ export default {
       icon: cfg.rightIcon,
       color: cfg.rightColor,
       avatar: cfg.rightAvatar,
-      letter: cfg.rightLetter,
+      letter: this.getLabelValue(cfg.rightLetter),
       image: cfg.rightImage,
-      stamp: cfg.stamp,
+      stamp: this.getLabelValue(cfg.stamp),
       inverted: cfg.rightInverted,
       textColor: cfg.rightTextColor
     })

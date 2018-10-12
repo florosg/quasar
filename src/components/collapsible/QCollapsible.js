@@ -5,6 +5,7 @@ import QItemWrapper from '../list/QItemWrapper.js'
 import QSlideTransition from '../slide-transition/QSlideTransition.js'
 import ModelToggleMixin from '../../mixins/model-toggle.js'
 import ItemMixin, { subItemProps } from '../../mixins/item.js'
+import LabelMixin  from '../../mixins/label.js'
 import { stopAndPrevent } from '../../utils/event.js'
 
 const eventName = 'q:collapsible:close'
@@ -14,6 +15,7 @@ export default {
   mixins: [
     ModelToggleMixin,
     ItemMixin,
+    LabelMixin,
     { props: subItemProps }
   ],
   modelToggle: {

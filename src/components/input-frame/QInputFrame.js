@@ -119,7 +119,7 @@ export default {
             staticClass: 'q-if-addon q-if-addon-left',
             'class': this.addonClass,
             domProps: {
-              innerHTML: this.prefix
+              innerHTML: this.getLabelValue(this.prefix)
             }
           })) || void 0,
 
@@ -129,7 +129,7 @@ export default {
           }, [
             h('div', {
               staticClass: 'q-if-label-inner ellipsis',
-              domProps: { innerHTML: this.label }
+              domProps: { innerHTML: this.getLabelValue(this.label) }
             })
           ])) || void 0
         ].concat(this.$slots.default).concat([
@@ -137,14 +137,14 @@ export default {
             staticClass: 'q-if-addon q-if-addon-right',
             'class': this.addonClass,
             domProps: {
-              innerHTML: this.suffix
+              innerHTML: this.getLabelValue(this.suffix)
             }
           })) || void 0
         ])),
         (this.hasLabel && h('div', {
           staticClass: 'q-if-label-spacer',
           domProps: {
-            innerHTML: this.label
+            innerHTML: this.getLabelValue(this.label)
           }
         })) || void 0
       ]),
