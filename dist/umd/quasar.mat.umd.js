@@ -6613,7 +6613,7 @@
     computed: {
       inputPlaceholder: function inputPlaceholder () {
         if ((!this.floatLabel && !this.stackLabel) || this.labelIsAbove) {
-          return this.placeholder
+          return this.getLabelValue(this.placeholder)
         }
       },
       isInverted: function isInverted () {
@@ -6651,11 +6651,12 @@
         return !!(!this.hasError && ((!this.noParentField && this.field && this.field.warning) || this.warning))
       },
       fakeInputValue: function fakeInputValue () {
+        var placeHolder = this.inputPlaceholder ;
         return this.actualValue || this.actualValue === 0
           ? this.actualValue
           : (
-            this.placeholder || this.placeholder === 0
-              ? this.placeholder
+            placeHolder || placeHolder === 0
+              ? placeHolder
               : ''
           )
       },

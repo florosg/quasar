@@ -39,7 +39,7 @@ export default {
   computed: {
     inputPlaceholder () {
       if ((!this.floatLabel && !this.stackLabel) || this.labelIsAbove) {
-        return this.placeholder
+        return this.getLabelValue(this.placeholder)
       }
     },
     isInverted () {
@@ -77,11 +77,12 @@ export default {
       return !!(!this.hasError && ((!this.noParentField && this.field && this.field.warning) || this.warning))
     },
     fakeInputValue () {
+      var placeHolder = this.inputPlaceholder ;
       return this.actualValue || this.actualValue === 0
         ? this.actualValue
         : (
-          this.placeholder || this.placeholder === 0
-            ? this.placeholder
+          placeHolder || placeHolder === 0
+            ? placeHolder
             : ''
         )
     },
