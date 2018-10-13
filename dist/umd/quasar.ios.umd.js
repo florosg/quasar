@@ -1,5 +1,5 @@
 /*!
- * Quasar Framework v0.17.16
+ * Quasar Framework v0.17.17
  * (c) 2016-present Razvan Stoenescu
  * Released under the MIT License.
  */
@@ -427,7 +427,7 @@
     });
   }
 
-  var version = "0.17.16";
+  var version = "0.17.17";
 
   var History = {
     __history: [],
@@ -16973,11 +16973,9 @@
         var this$1 = this;
 
         this.$nextTick(function () {
-           if (JSON.stringify(this$1.model) !== JSON.stringify(this$1.value)) {
-            console.log('this.model ', this$1.model);
-            console.log('this.value ', this$1.value);
+          if (JSON.stringify(this$1.model) !== JSON.stringify(this$1.value)) {
             this$1.$emit('change', this$1.model);
-           }
+          }
         });
         this.terms = '';
         if (!this.focused) {
@@ -17020,16 +17018,13 @@
 
         this.$emit('input', value);
         this.$nextTick(function () {
-          console.log('this.model ', this$1.model);
-          console.log('this.value ', this$1.value);
-
-          // if (JSON.stringify(value) !== JSON.stringify(this.value)) {
+          if (JSON.stringify(value) !== JSON.stringify(this$1.value)) {
             this$1.$emit('change', value);
             // FLOROSG
             this$1.$nextTick(function (){
               this$1.value = value;
             });
-          // }
+          }
         });
       },
       __setModel: function __setModel (val, forceUpdate) {
@@ -21483,7 +21478,8 @@
         type: Array,
         required: true
       },
-      color: String
+      color: String,
+      dark: Boolean
     },
     computed: {
       computedOptions: function computedOptions () {
@@ -21504,6 +21500,7 @@
           options: this.computedOptions,
           displayValue: this.label || this.$q.i18n.table.columns,
           color: this.color,
+          dark: this.dark,
           hideUnderline: true
         },
         on: {
@@ -24767,7 +24764,7 @@
       return win
     }
     else {
-      reject();
+      reject && reject();
     }
   }
 

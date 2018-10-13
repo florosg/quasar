@@ -1,5 +1,5 @@
 /*
- * Quasar Framework v0.17.16
+ * Quasar Framework v0.17.17
  * (c) 2016-present Razvan Stoenescu
  * Released under the MIT License.
  */
@@ -1121,6 +1121,10 @@ body.desktop .q-carousel-thumbnails img:hover {
 .q-datetime-header > div {
   color: #fff;
   width: 100%;
+}
+.modal-content > .q-datetime > .q-datetime-header,
+.q-popover > .q-datetime > .q-datetime-header {
+  min-width: 175px;
 }
 .q-datetime-weekdaystring {
   font-size: 0.8rem;
