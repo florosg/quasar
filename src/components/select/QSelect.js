@@ -134,7 +134,7 @@ export default {
     reposition () {
       const popover = this.$refs.popover
       if (popover && popover.showing) {
-        this.$nextTick(() => popover && popover.reposition())
+        this.$nextTick(() => popover && popover.reposition(selectedOptions))
       }
     },
 
