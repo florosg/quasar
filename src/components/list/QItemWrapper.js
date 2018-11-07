@@ -76,6 +76,7 @@ export default {
     return h(QItem, {
       attrs: this.$attrs,
       on: this.$listeners,
+      staticClass: cfg.className,
       props: cfg
     }, child)
   }
