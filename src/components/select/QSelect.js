@@ -116,7 +116,7 @@ export default {
         : ([null, undefined, ''].includes(this.model) ? 0 : 1)
     },
     additionalLength () {
-      return this.displayValue && this.displayValue.length > 0
+      return this.displayValue && this.getLabelValue(this.displayValue).length > 0
     }
   },
   methods: {

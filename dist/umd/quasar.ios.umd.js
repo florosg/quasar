@@ -16756,7 +16756,7 @@
 
   var QSelect = {
     name: 'QSelect',
-    mixins: [FrameMixin, KeyboardSelectionMixin],
+    mixins: [FrameMixin,LabelMixins, KeyboardSelectionMixin],
     props: {
       filter: [Function, Boolean],
       filterPlaceholder: String,
@@ -16828,7 +16828,7 @@
         var this$1 = this;
 
         if (this.displayValue) {
-          return this.displayValue
+          return this.getLabelValue(this.displayValue)
         }
         if (!this.multiple) {
           var opt$1 = this.options.find(function (opt) { return opt.value === this$1.model; });
