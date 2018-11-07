@@ -9,6 +9,7 @@ import QIcon from '../icon/QIcon.js'
 import QInputFrame from '../input-frame/QInputFrame.js'
 import QChip from '../chip/QChip.js'
 import FrameMixin from '../../mixins/input-frame.js'
+import LabelMixin from '../../mixins/label.js'
 import KeyboardSelectionMixin from '../../mixins/keyboard-selection.js'
 
 function defaultFilterFn (terms, obj) {
@@ -17,7 +18,7 @@ function defaultFilterFn (terms, obj) {
 
 export default {
   name: 'QSelect',
-  mixins: [FrameMixin, KeyboardSelectionMixin],
+  mixins: [FrameMixin,LabelMixin, KeyboardSelectionMixin],
   props: {
     filter: [Function, Boolean],
     filterPlaceholder: String,
@@ -83,7 +84,7 @@ export default {
     },
     actualValue () {
       if (this.displayValue) {
-        return this.displayValue
+        return this.getLabelValue(this.displayValue)
       }
       if (!this.multiple) {
         const opt = this.options.find(opt => opt.value === this.model)

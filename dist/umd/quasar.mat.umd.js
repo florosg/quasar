@@ -17228,7 +17228,7 @@
       reposition: function reposition () {
         var popover = this.$refs.popover;
         if (popover && popover.showing) {
-          this.$nextTick(function () { return popover && popover.reposition(selectedOptions); });
+          this.$nextTick(function () { return popover && popover.reposition(); });
         }
       },
 
