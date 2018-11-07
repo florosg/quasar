@@ -4286,6 +4286,7 @@
       return h(QItem, {
         attrs: this.$attrs,
         on: this.$listeners,
+        staticClass: cfg.className,
         props: cfg
       }, child)
     }
@@ -16880,7 +16881,7 @@
       reposition: function reposition () {
         var popover = this.$refs.popover;
         if (popover && popover.showing) {
-          this.$nextTick(function () { return popover && popover.reposition(); });
+          this.$nextTick(function () { return popover && popover.reposition(selectedOptions); });
         }
       },
 
@@ -17148,6 +17149,7 @@
         })) || void 0,
 
         (this.visibleOptions.length && h(QList, {
+
           staticClass: 'no-border scroll',
           props: {
             separator: this.separator,

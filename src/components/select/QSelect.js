@@ -134,7 +134,7 @@ export default {
     reposition () {
       const popover = this.$refs.popover
       if (popover && popover.showing) {
-        this.$nextTick(() => popover && popover.reposition(selectedOptions))
+        this.$nextTick(() => popover && popover.reposition())
       }
     },
 
@@ -392,6 +392,7 @@ export default {
       })) || void 0,
 
       (this.visibleOptions.length && h(QList, {
+
         staticClass: 'no-border scroll',
         props: {
           separator: this.separator,
