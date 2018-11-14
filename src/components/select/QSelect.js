@@ -46,7 +46,8 @@ export default {
     chipsColor: String,
     chipsBgColor: String,
     displayValue: String,
-    popupMaxHeight: String
+    popupMaxHeight: String,
+    popupClass: String
   },
   data () {
     return {
@@ -362,7 +363,7 @@ export default {
 
     child.push(h(QPopover, {
       ref: 'popover',
-      staticClass: 'column no-wrap',
+      staticClass: `${this.popupClass || ''} column no-wrap`,
       'class': this.dark ? 'bg-dark' : null,
       props: {
         cover: true,

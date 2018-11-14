@@ -17107,6 +17107,15 @@
     props: {
       filter: [Function, Boolean],
       filterPlaceholder: String,
+      //FLOROSG
+      filterClearable: {
+        type: Boolean,
+        default: true
+      },
+      filterClearableValue: {
+        type: String,
+        default: ''
+      },
       radio: Boolean,
       placeholder: String,
       separator: Boolean,
@@ -17480,6 +17489,8 @@
           style: 'padding: 10px;',
           props: {
             value: this.terms,
+            clearable: this.filterClearable,
+            clearableValue: this.filterClearableValue,
             placeholder: this.filterPlaceholder || this.$q.i18n.label.filter,
             debounce: 100,
             color: this.color,

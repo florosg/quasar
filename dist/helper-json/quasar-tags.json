@@ -1070,6 +1070,8 @@
       "no-parent-field",
       "filter",
       "filter-placeholder",
+      "filter-clearable",
+      "filter-clearable-value",
       "radio",
       "separator",
       "multiple",

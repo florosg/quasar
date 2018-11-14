@@ -2763,6 +2763,14 @@
     "type": "string",
     "description": "String value."
   },
+  "q-select/filter-clearable": {
+    "type": "boolean",
+    "description": "Boolean value."
+  },
+  "q-select/filter-clearable-value": {
+    "type": "string",
+    "description": "String value."
+  },
   "q-select/radio": {
     "type": "boolean",
     "description": "Boolean value."
