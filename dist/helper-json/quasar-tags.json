@@ -1081,7 +1081,8 @@
       "chips-color",
       "chips-bg-color",
       "display-value",
-      "popup-max-height"
+      "popup-max-height",
+      "popup-class"
     ],
     "description": ""
   },

@@ -2811,6 +2811,10 @@
     "type": "string",
     "description": "String value."
   },
+  "q-select/popup-class": {
+    "type": "string",
+    "description": "String value."
+  },
   "q-slide-transition/appear": {
     "type": "boolean",
     "description": "Boolean value."
