@@ -24438,8 +24438,9 @@
               ref: ("notif_" + (notif.__uid)),
               key: notif.__uid,
               staticClass: 'q-notification',
-              props: notif
-            }, [ notif.message ])
+              props: notif,
+              domProps: { innerHTML: notif.message }
+            })
           }))
         }))
       }

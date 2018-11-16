@@ -146,9 +146,12 @@ function init ({ Vue }) {
             ref: `notif_${notif.__uid}`,
             key: notif.__uid,
             staticClass: 'q-notification',
-            props: notif,
-            domProps: { innerHTML: notif.message }
-          })
+            props: notif
+          }, [h('div',
+            {
+              staticClass: 'q-notification-content-message',
+              domProps: { innerHTML: notif.message }
+          })])
         }))
       }))
     }
