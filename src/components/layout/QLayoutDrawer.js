@@ -433,6 +433,7 @@ export default {
     __updateLocal (prop, val) {
       if (this[prop] !== val) {
         this[prop] = val
+
       }
     }
   },

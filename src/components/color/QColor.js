@@ -1,5 +1,6 @@
 import FrameMixin from '../../mixins/input-frame.js'
 import DisplayModeMixin from '../../mixins/display-mode.js'
+import ColorMixin from '../../mixins/color.js'
 import QInputFrame from '../input-frame/QInputFrame.js'
 import QPopover from '../popover/QPopover.js'
 import QColorPicker from './QColorPicker.js'
@@ -23,27 +24,17 @@ const contentCss = process.env.THEME === 'ios'
 
 export default {
   name: 'QColor',
-  mixins: [FrameMixin, DisplayModeMixin],
+  mixins: [FrameMixin, DisplayModeMixin, ColorMixin],
   props: {
     value: {
       required: true
     },
-    color: {
-      type: String,
-      default: 'primary'
-    },
-    defaultValue: {
-      type: [String, Object],
-      default: null
-    },
-    formatModel: {
-      type: String,
-      default: 'auto',
-      validator: v => ['auto', 'hex', 'rgb', 'hexa', 'rgba'].includes(v)
-    },
+
+
     displayValue: String,
     okLabel: String,
-    cancelLabel: String
+    cancelLabel: String,
+    displaySelectedColor: Boolean
   },
   watch: {
     value (v) {
@@ -84,7 +75,13 @@ export default {
       return process.env.THEME === 'mat'
         ? this.color
         : (this.dark ? 'light' : 'dark')
+    },
+    forceAlpha () {
+      return this.formatModel === 'auto'
+        ? null
+        : this.formatModel.indexOf('a') > -1
     }
+
   },
   methods: {
     toggle () {
@@ -166,6 +163,10 @@ export default {
           this.$emit('input', this.model)
           if (change) {
             this.$emit('change', this.model)
+            // FLOROSG
+            this.$nextTick(()=>{
+              this.value = this.model;
+            })
           }
         }
       })
@@ -264,11 +265,23 @@ export default {
         keydown: this.__handleKeyDown
       }
     }, [
+
+
       h('div', {
-        staticClass: 'col q-input-target ellipsis',
+        staticClass: 'col q-input-target ellipsis items-end',
         'class': this.fakeInputClasses
       }, [
-        this.fakeInputValue
+           this.displaySelectedColor ?
+             h('div', {
+               staticClass: 'q-mr-sm q-color-input-selected-color',
+               style:{
+                 width: '30px',
+                 height: '30px',
+                 borderRadius: '10%',
+                 backgroundColor: this.__rgbToHex(this.value)
+               }
+             }) : void(0)
+        ,this.fakeInputValue
       ]),
 
       this.isPopover

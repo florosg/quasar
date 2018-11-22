@@ -1,6 +1,8 @@
 import QBtn from '../btn/QBtn.js'
 import QSlider from '../slider/QSlider.js'
 import ParentFieldMixin from '../../mixins/parent-field.js'
+import ColorMixin from '../../mixins/color.js'
+
 import TouchPan from '../../directives/touch-pan.js'
 import { stopAndPrevent } from '../../utils/event.js'
 import throttle from '../../utils/throttle.js'
@@ -9,21 +11,13 @@ import { hexToRgb, rgbToHex, rgbToHsv, hsvToRgb } from '../../utils/colors.js'
 
 export default {
   name: 'QColorPicker',
-  mixins: [ParentFieldMixin],
+  mixins: [ParentFieldMixin, ColorMixin],
   directives: {
     TouchPan
   },
   props: {
     value: [String, Object],
-    defaultValue: {
-      type: [String, Object],
-      default: null
-    },
-    formatModel: {
-      type: String,
-      default: 'auto',
-      validator: v => ['auto', 'hex', 'rgb', 'hexa', 'rgba'].includes(v)
-    },
+
     disable: Boolean,
     readonly: Boolean,
     dark: Boolean
@@ -51,11 +45,7 @@ export default {
         ? null
         : this.formatModel.indexOf('hex') > -1
     },
-    forceAlpha () {
-      return this.formatModel === 'auto'
-        ? null
-        : this.formatModel.indexOf('a') > -1
-    },
+
     isHex () {
       return typeof this.value === 'string'
     },
@@ -384,24 +374,18 @@ export default {
       this.$nextTick(() => {
         if (change && JSON.stringify(value) !== JSON.stringify(this.value)) {
           this.$emit('change', value)
+
+          // FLOROSG
+          this.$nextTick(()=>{
+            this.value = value;
+          })
         }
       })
     },
     __nextInputView () {
       this.view = this.view === 'hex' ? 'rgba' : 'hex'
     },
-    __parseModel (v) {
-      if (v === null || v === void 0) {
-        return { h: 0, s: 0, v: 0, r: 0, g: 0, b: 0, hex: void 0, a: 100 }
-      }
 
-      let model = typeof v === 'string' ? hexToRgb(v.trim()) : clone(v)
-      if (this.forceAlpha === (model.a === void 0)) {
-        model.a = this.forceAlpha ? 100 : void 0
-      }
-      model.hex = rgbToHex(model)
-      return Object.assign({ a: 100 }, model, rgbToHsv(model))
-    },
 
     __saturationPan (evt) {
       if (evt.isFinal) {

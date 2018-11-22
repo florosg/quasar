@@ -7668,6 +7668,55 @@
     }
   };
 
+  function clone (data) {
+    var s = JSON.stringify(data);
+    if (s) {
+      return JSON.parse(s)
+    }
+  }
+
+  var ColorMixin = {
+    props: {
+      defaultValue: {
+        type: [String, Object],
+        default: null
+      },
+      formatModel: {
+        type: String,
+        default: 'auto',
+        validator: function (v) { return ['auto', 'hex', 'rgb', 'hexa', 'rgba'].includes(v); }
+      },
+      color: {
+        type: String,
+        default: 'primary'
+      }
+    },
+    computed: {
+      forceAlpha: function forceAlpha () {
+        return this.formatModel === 'auto'
+          ? null
+          : this.formatModel.indexOf('a') > -1
+      }
+    },
+    methods: {
+      __parseModel: function __parseModel(v) {
+        if (v === null || v === void 0) {
+          return {h: 0, s: 0, v: 0, r: 0, g: 0, b: 0, hex: void 0, a: 100}
+        }
+
+        var model = typeof v === 'string' ? hexToRgb(v.trim()) : clone(v);
+        if (this.forceAlpha === (model.a === void 0)) {
+          model.a = this.forceAlpha ? 100 : void 0;
+        }
+        model.hex = rgbToHex(model);
+        return Object.assign({a: 100}, model, rgbToHsv(model))
+      },
+
+      __rgbToHex: function __rgbToHex (value) {
+        return typeof value === 'string' ? value : rgbToHex(value);    }
+    }
+  };
+
   function getPercentage (event$$1, dragging, rtl) {
     var val = between((position(event$$1).left - dragging.left) / dragging.width, 0, 1);
     return rtl ? 1.0 - val : val
@@ -8046,30 +8095,15 @@
     }
   }
 
-  function clone (data) {
-    var s = JSON.stringify(data);
-    if (s) {
-      return JSON.parse(s)
-    }
-  }
-
   var QColorPicker = {
     name: 'QColorPicker',
-    mixins: [ParentFieldMixin],
+    mixins: [ParentFieldMixin, ColorMixin],
     directives: {
       TouchPan: TouchPan
     },
     props: {
       value: [String, Object],
-      defaultValue: {
-        type: [String, Object],
-        default: null
-      },
-      formatModel: {
-        type: String,
-        default: 'auto',
-        validator: function (v) { return ['auto', 'hex', 'rgb', 'hexa', 'rgba'].includes(v); }
-      },
+
       disable: Boolean,
       readonly: Boolean,
       dark: Boolean
@@ -8097,11 +8131,7 @@
           ? null
           : this.formatModel.indexOf('hex') > -1
       },
-      forceAlpha: function forceAlpha () {
-        return this.formatModel === 'auto'
-          ? null
-          : this.formatModel.indexOf('a') > -1
-      },
+
       isHex: function isHex () {
         return typeof this.value === 'string'
       },
@@ -8439,24 +8469,18 @@
         this.$nextTick(function () {
           if (change && JSON.stringify(value) !== JSON.stringify(this$1.value)) {
             this$1.$emit('change', value);
+
+            // FLOROSG
+            this$1.$nextTick(function (){
+              this$1.value = value;
+            });
           }
         });
       },
       __nextInputView: function __nextInputView () {
         this.view = this.view === 'hex' ? 'rgba' : 'hex';
       },
-      __parseModel: function __parseModel (v) {
-        if (v === null || v === void 0) {
-          return { h: 0, s: 0, v: 0, r: 0, g: 0, b: 0, hex: void 0, a: 100 }
-        }
 
-        var model = typeof v === 'string' ? hexToRgb(v.trim()) : clone(v);
-        if (this.forceAlpha === (model.a === void 0)) {
-          model.a = this.forceAlpha ? 100 : void 0;
-        }
-        model.hex = rgbToHex(model);
-        return Object.assign({ a: 100 }, model, rgbToHsv(model))
-      },
 
       __saturationPan: function __saturationPan (evt) {
         if (evt.isFinal) {
@@ -8522,27 +8546,17 @@
 
   var QColor = {
     name: 'QColor',
-    mixins: [FrameMixin, DisplayModeMixin],
+    mixins: [FrameMixin, DisplayModeMixin, ColorMixin],
     props: {
       value: {
         required: true
       },
-      color: {
-        type: String,
-        default: 'primary'
-      },
-      defaultValue: {
-        type: [String, Object],
-        default: null
-      },
-      formatModel: {
-        type: String,
-        default: 'auto',
-        validator: function (v) { return ['auto', 'hex', 'rgb', 'hexa', 'rgba'].includes(v); }
-      },
+
+
       displayValue: String,
       okLabel: String,
-      cancelLabel: String
+      cancelLabel: String,
+      displaySelectedColor: Boolean
     },
     watch: {
       value: function value (v) {
@@ -8581,7 +8595,13 @@
       },
       modalBtnColor: function modalBtnColor () {
         return this.color
+      },
+      forceAlpha: function forceAlpha () {
+        return this.formatModel === 'auto'
+          ? null
+          : this.formatModel.indexOf('a') > -1
       }
+
     },
     methods: {
       toggle: function toggle () {
@@ -8667,6 +8687,10 @@
             this$1.$emit('input', this$1.model);
             if (change) {
               this$1.$emit('change', this$1.model);
+              // FLOROSG
+              this$1.$nextTick(function (){
+                this$1.value = this$1.model;
+              });
             }
           }
         });
@@ -8769,11 +8793,23 @@
           keydown: this.__handleKeyDown
         }
       }, [
+
+
         h('div', {
-          staticClass: 'col q-input-target ellipsis',
+          staticClass: 'col q-input-target ellipsis items-end',
           'class': this.fakeInputClasses
         }, [
-          this.fakeInputValue
+             this.displaySelectedColor ?
+               h('div', {
+                 staticClass: 'q-mx-sm q-color-input-selected-color',
+                 style:{
+                   width: '30px',
+                   height: '30px',
+                   borderRadius: '10%',
+                   backgroundColor: this.__rgbToHex(this.value)
+                 }
+               }) : void(0)
+          ,this.fakeInputValue
         ]),
 
         this.isPopover
@@ -14674,6 +14710,7 @@
       __updateLocal: function __updateLocal (prop, val) {
         if (this[prop] !== val) {
           this[prop] = val;
+
         }
       }
     },
@@ -25004,9 +25041,12 @@
               ref: ("notif_" + (notif.__uid)),
               key: notif.__uid,
               staticClass: 'q-notification',
-              props: notif,
-              domProps: { innerHTML: notif.message }
-            })
+              props: notif
+            }, [h('div',
+              {
+                staticClass: 'q-notification-content-message',
+                domProps: { innerHTML: notif.message }
+            })])
           }))
         }))
       }

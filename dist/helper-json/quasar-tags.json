@@ -396,7 +396,8 @@
       "format-model",
       "display-value",
       "ok-label",
-      "cancel-label"
+      "cancel-label",
+      "display-selected-color"
     ],
     "description": ""
   },
@@ -405,6 +406,7 @@
       "no-parent-field",
       "default-value",
       "format-model",
+      "color",
       "disable",
       "readonly",
       "dark"

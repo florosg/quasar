@@ -1079,6 +1079,10 @@
     "type": "string",
     "description": "String value."
   },
+  "q-color/display-selected-color": {
+    "type": "boolean",
+    "description": "Boolean value."
+  },
   "q-color-picker/no-parent-field": {
     "type": "boolean",
     "description": "Boolean value."
@@ -1088,6 +1092,10 @@
     "description": "One of string or object."
   },
   "q-color-picker/format-model": {
+    "type": "string",
+    "description": "String value."
+  },
+  "q-color-picker/color": {
     "type": "string",
     "description": "String value."
   },
