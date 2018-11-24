@@ -2827,6 +2827,10 @@
     "type": "boolean",
     "description": "Boolean value."
   },
+  "q-select/grid-alignment": {
+    "type": "string",
+    "description": "String value."
+  },
   "q-slide-transition/appear": {
     "type": "boolean",
     "description": "Boolean value."

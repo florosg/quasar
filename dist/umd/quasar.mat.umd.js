@@ -17172,8 +17172,14 @@
       popupClass: String,
       grid: {
         type: Boolean,
-        default: false
+        default: false,
       },
+      gridAlignment: {
+        type: String,
+        default: 'start',
+        required: false,
+        validator: function (v) { return ['end', 'start', 'center', 'between', 'around'].includes(v); }
+      }
     },
     data: function data () {
       return {
@@ -17551,7 +17557,7 @@
         (this.visibleOptions.length && h(QList, {
           //FLOROSG
           ref: 'list',
-          staticClass: ("no-border scroll " + (this.grid ? 'row justify-between gutter-xs' : '')),
+          staticClass: ("no-border scroll " + (this.grid ? ("row justify-" + (this.gridAlignment)) : '')),
           props: {
             separator: this.separator,
             dark: this.dark

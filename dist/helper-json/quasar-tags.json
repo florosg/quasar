@@ -1085,7 +1085,8 @@
       "display-value",
       "popup-max-height",
       "popup-class",
-      "grid"
+      "grid",
+      "grid-alignment"
     ],
     "description": ""
   },
