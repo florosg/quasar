@@ -8801,7 +8801,7 @@
         }, [
              this.displaySelectedColor ?
                h('div', {
-                 staticClass: 'q-mx-sm q-color-input-selected-color',
+                 staticClass: 'q-mr-sm q-color-input-selected-color',
                  style:{
                    width: '30px',
                    height: '30px',
@@ -17169,7 +17169,11 @@
       chipsBgColor: String,
       displayValue: String,
       popupMaxHeight: String,
-      popupClass: String
+      popupClass: String,
+      grid: {
+        type: Boolean,
+        default: false
+      },
     },
     data: function data () {
       return {
@@ -17503,7 +17507,7 @@
 
       child.push(h(QPopover, {
         ref: 'popover',
-        staticClass: ((this.popupClass || '') + " column no-wrap"),
+        staticClass: ((this.popupClass || '') + "  column no-wrap"),
         'class': this.dark ? 'bg-dark' : null,
         props: {
           cover: true,
@@ -17545,8 +17549,8 @@
         })) || void 0,
 
         (this.visibleOptions.length && h(QList, {
-
-          staticClass: 'no-border scroll',
+          //FLOROSG
+          staticClass: ("no-border scroll " + (this.grid ? 'row justify-between' : '')),
           props: {
             separator: this.separator,
             dark: this.dark
@@ -17554,6 +17558,8 @@
         }, this.visibleOptions.map(function (opt, index) {
           return h(QItemWrapper, {
             key: index,
+            //FLOROSG
+            staticClass:("" + (this$1.grid ? 'col-auto content-center gutter-xs': '')),
             'class': [
               opt.disable ? 'text-faded' : 'cursor-pointer',
               index === this$1.keyboardIndex ? 'q-select-highlight' : '',

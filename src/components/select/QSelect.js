@@ -47,7 +47,11 @@ export default {
     chipsBgColor: String,
     displayValue: String,
     popupMaxHeight: String,
-    popupClass: String
+    popupClass: String,
+    grid: {
+      type: Boolean,
+      default: false
+    },
   },
   data () {
     return {
@@ -363,7 +367,7 @@ export default {
 
     child.push(h(QPopover, {
       ref: 'popover',
-      staticClass: `${this.popupClass || ''} column no-wrap`,
+      staticClass: `${this.popupClass || ''}  column no-wrap`,
       'class': this.dark ? 'bg-dark' : null,
       props: {
         cover: true,
@@ -405,8 +409,8 @@ export default {
       })) || void 0,
 
       (this.visibleOptions.length && h(QList, {
-
-        staticClass: 'no-border scroll',
+        //FLOROSG
+        staticClass: `no-border scroll ${this.grid ? 'row justify-between' : ''}`,
         props: {
           separator: this.separator,
           dark: this.dark
@@ -414,6 +418,8 @@ export default {
       }, this.visibleOptions.map((opt, index) => {
         return h(QItemWrapper, {
           key: index,
+          //FLOROSG
+          staticClass:`${this.grid ? 'col-auto content-center gutter-xs': ''}`,
           'class': [
             opt.disable ? 'text-faded' : 'cursor-pointer',
             index === this.keyboardIndex ? 'q-select-highlight' : '',
