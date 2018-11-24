@@ -528,8 +528,9 @@ export default {
     }, child)
   },
   beforeUpdate() {
-    if( this.grid && this.$refs.list) {
+    if( this.grid) {
       this.$nextTick(()=>{
+        if(!this.$refs.list) return;
         const style = window.getComputedStyle(this.$el.parentNode)
         this.$refs.list.$el.style.maxWidth = style.getPropertyValue('width');
       });

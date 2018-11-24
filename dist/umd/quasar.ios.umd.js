@@ -17323,8 +17323,9 @@
     beforeUpdate: function beforeUpdate() {
       var this$1 = this;
 
-      if( this.grid && this.$refs.list) {
+      if( this.grid) {
         this.$nextTick(function (){
+          if(!this$1.$refs.list) { return; }
           var style = window.getComputedStyle(this$1.$el.parentNode);
           this$1.$refs.list.$el.style.maxWidth = style.getPropertyValue('width');
         });
