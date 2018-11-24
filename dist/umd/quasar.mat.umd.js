@@ -17667,11 +17667,14 @@
         }
       }, child)
     },
+    beforeUpdate: function beforeUpdate() {
+      var this$1 = this;
 
-    mounted: function mounted () {
-      if( this.grid ) {
-          var style = window.getComputedStyle(this.$el.parentNode);
-          this.$refs.list.$el.style.maxWidth = style.getPropertyValue('width');
+      if( this.grid && this.$refs.list) {
+        this.$nextTick(function (){
+          var style = window.getComputedStyle(this$1.$el.parentNode);
+          this$1.$refs.list.$el.style.maxWidth = style.getPropertyValue('width');
+        });
       }
     }
   };

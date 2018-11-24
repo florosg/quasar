@@ -527,11 +527,12 @@ export default {
       }
     }, child)
   },
-
-  mounted () {
-    if( this.grid ) {
+  beforeUpdate() {
+    if( this.grid && this.$refs.list) {
+      this.$nextTick(()=>{
         const style = window.getComputedStyle(this.$el.parentNode)
         this.$refs.list.$el.style.maxWidth = style.getPropertyValue('width');
+      });
     }
   }
 }
