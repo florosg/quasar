@@ -17204,7 +17204,7 @@
         (this.visibleOptions.length && h(QList, {
           //FLOROSG
           ref: 'list',
-          staticClass: ("no-border scroll " + (this.grid ? 'row gutter-xs' : '')),
+          staticClass: ("no-border scroll " + (this.grid ? 'row justify-between gutter-xs' : '')),
           props: {
             separator: this.separator,
             dark: this.dark
