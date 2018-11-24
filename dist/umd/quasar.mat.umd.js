@@ -17550,7 +17550,8 @@
 
         (this.visibleOptions.length && h(QList, {
           //FLOROSG
-          staticClass: ("no-border scroll " + (this.grid ? 'row justify-between' : '')),
+          ref: 'list',
+          staticClass: ("no-border scroll " + (this.grid ? 'row gutter-xs' : '')),
           props: {
             separator: this.separator,
             dark: this.dark
@@ -17559,7 +17560,7 @@
           return h(QItemWrapper, {
             key: index,
             //FLOROSG
-            staticClass:("" + (this$1.grid ? 'col-auto content-center gutter-xs': '')),
+            staticClass:("" + (this$1.grid ? 'col-auto content-center': '')),
             'class': [
               opt.disable ? 'text-faded' : 'cursor-pointer',
               index === this$1.keyboardIndex ? 'q-select-highlight' : '',
@@ -17659,6 +17660,13 @@
           keydown: this.__keyboardHandleKey
         }
       }, child)
+    },
+
+    mounted: function mounted () {
+      if( this.grid ) {
+          var style = window.getComputedStyle(this.$el.parentNode);
+          this.$refs.list.$el.style.maxWidth = style.getPropertyValue('width');
+      }
     }
   };
 
