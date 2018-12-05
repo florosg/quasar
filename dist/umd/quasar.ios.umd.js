@@ -1614,12 +1614,12 @@
     return scrollTarget.scrollLeft
   }
 
-  function animScrollTo (el, to, duration) {
+  function animScrollTo (el, to, duration, axis) {
     if (duration <= 0) {
       return
     }
 
-    var pos = getScrollPosition(el);
+    var pos = axis ? axis === 'x' ? getHorizontalScrollPosition(el) : getScrollPosition(el) : getScrollPosition(el);
 
     requestAnimationFrame(function () {
       setScroll(el, pos + (to - pos) / Math.max(16, duration) * 16);
@@ -1629,21 +1629,23 @@
     });
   }
 
-  function setScroll (scrollTarget, offset$$1) {
+  function setScroll (scrollTarget, offset$$1, axis) {
     if (scrollTarget === window) {
       document.documentElement.scrollTop = offset$$1;
       document.body.scrollTop = offset$$1;
       return
     }
-    scrollTarget.scrollTop = offset$$1;
+    var pos = axis ? axis === 'x' ? 'scrollLeft' : 'scrollTop' : 'scrollTop';
+
+    scrollTarget[pos] = offset$$1;
   }
 
-  function setScrollPosition (scrollTarget, offset$$1, duration) {
+  function setScrollPosition (scrollTarget, offset$$1, duration, axis) {
     if (duration) {
-      animScrollTo(scrollTarget, offset$$1, duration);
+      animScrollTo(scrollTarget, offset$$1, duration, axis);
       return
     }
-    setScroll(scrollTarget, offset$$1);
+    setScroll(scrollTarget, offset$$1, axis);
   }
 
   var size;
