@@ -30,9 +30,9 @@ export function animScrollTo (el, to, duration, axis) {
   const pos = axis ? axis === 'x' ? getHorizontalScrollPosition(el) : getScrollPosition(el) : getScrollPosition(el)
 
   requestAnimationFrame(() => {
-    setScroll(el, pos + (to - pos) / Math.max(16, duration) * 16)
+    setScroll(el, pos + (to - pos) / Math.max(16, duration) * 16, axis)
     if (el.scrollTop !== to) {
-      animScrollTo(el, to, duration - 16)
+      animScrollTo(el, to, duration - 16, axis)
     }
   })
 }
