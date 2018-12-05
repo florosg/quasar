@@ -22,12 +22,12 @@ export function getHorizontalScrollPosition (scrollTarget) {
   return scrollTarget.scrollLeft
 }
 
-export function animScrollTo (el, to, duration) {
+export function animScrollTo (el, to, duration, axis) {
   if (duration <= 0) {
     return
   }
 
-  const pos = getScrollPosition(el)
+  const pos = axis ? axis === 'x' ? getHorizontalScrollPosition(el) : getScrollPosition(el) : getScrollPosition(el)
 
   requestAnimationFrame(() => {
     setScroll(el, pos + (to - pos) / Math.max(16, duration) * 16)
@@ -37,21 +37,23 @@ export function animScrollTo (el, to, duration) {
   })
 }
 
-function setScroll (scrollTarget, offset) {
+function setScroll (scrollTarget, offset, axis) {
   if (scrollTarget === window) {
     document.documentElement.scrollTop = offset
     document.body.scrollTop = offset
     return
   }
-  scrollTarget.scrollTop = offset
+  const pos = axis ? axis === 'x' ? 'scrollLeft' : 'scrollTop' : 'scrollTop';
+
+  scrollTarget[pos] = offset
 }
 
-export function setScrollPosition (scrollTarget, offset, duration) {
+export function setScrollPosition (scrollTarget, offset, duration, axis) {
   if (duration) {
-    animScrollTo(scrollTarget, offset, duration)
+    animScrollTo(scrollTarget, offset, duration, axis)
     return
   }
-  setScroll(scrollTarget, offset)
+  setScroll(scrollTarget, offset, axis)
 }
 
 let size
