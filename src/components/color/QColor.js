@@ -275,8 +275,8 @@ export default {
              h('div', {
                staticClass: 'q-mr-sm q-color-input-selected-color',
                style:{
-                 width: '30px',
-                 height: '30px',
+                 width: '24px',
+                 height: '24px',
                  borderRadius: '10%',
                  backgroundColor: this.__rgbToHex(this.value)
                }
