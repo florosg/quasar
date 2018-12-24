@@ -16,7 +16,7 @@
     "dev:umd": "node build/script.test-umd.js",
     "build": "node build/script.build.js",
     "build-cp":"npm run build && npm run cp",
-    "cp":"cp -r ./{dist,i18n,icons,src} ../TechInsights3/vue/node_modules/quasar-framework",
+    "cp":"cp -r ./{dist,i18n,icons,src} ../TechInsights3/resources/assets/vue/node_modules/quasar-framework",
     "test": "eslint --ext .js,.vue src dev",
     "lint": "eslint --ext .js,.vue src dev"
   },
