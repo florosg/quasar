@@ -27,11 +27,11 @@ export default {
       }
 
       const bottom = this.$scopedSlots.bottom
-
+      const bottomRight = this.$scopedSlots.bottomRight
       return h('div', {
         staticClass: 'q-table-bottom row items-center',
         'class': bottom ? null : 'justify-end'
-      }, [bottom ? bottom(this.marginalsProps) : void (0), this.getPaginationRow(h)])
+      }, [bottom ? bottom(this.marginalsProps) : void (0), this.getPaginationRow(h), bottomRight ? bottomRight(this.marginalsProps) : void (0)])
     },
     getPaginationRow (h) {
       const
