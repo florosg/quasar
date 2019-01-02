@@ -24,6 +24,7 @@ export default {
     noEscDismiss: Boolean,
     noRefocus: Boolean,
     position: String,
+    defaultActionIndex: Number,
     color: {
       type: String,
       default: 'primary'
@@ -115,7 +116,13 @@ export default {
 
           node = this.$refs.modal.$el.getElementsByClassName('q-btn')
           if (node.length) {
-            node[node.length - 1].focus()
+            try {
+              const index = this.defaultActionIndex !== undefined && this.defaultActionIndex > -1 ? this.defaultActionIndex : node.length - 1
+              node[index].focus()
+            }
+            catch (e) {
+
+            }
           }
           this.$emit('show')
         },

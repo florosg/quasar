@@ -11806,6 +11806,7 @@
       noEscDismiss: Boolean,
       noRefocus: Boolean,
       position: String,
+      defaultActionIndex: Number,
       color: {
         type: String,
         default: 'primary'
@@ -11899,7 +11900,13 @@
 
             node = this$1.$refs.modal.$el.getElementsByClassName('q-btn');
             if (node.length) {
-              node[node.length - 1].focus();
+              try {
+                var index = this$1.defaultActionIndex !== undefined && this$1.defaultActionIndex > -1 ? this$1.defaultActionIndex : node.length - 1;
+                node[index].focus();
+              }
+              catch (e) {
+
+              }
             }
             this$1.$emit('show');
           },

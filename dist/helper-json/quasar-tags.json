@@ -494,6 +494,7 @@
       "no-esc-dismiss",
       "no-refocus",
       "position",
+      "default-action-index",
       "color"
     ],
     "description": ""
