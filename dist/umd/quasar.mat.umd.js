@@ -1,5 +1,5 @@
 /*!
- * Quasar Framework v0.17.17
+ * Quasar Framework v0.17.18
  * (c) 2016-present Razvan Stoenescu
  * Released under the MIT License.
  */
@@ -427,7 +427,7 @@
     });
   }
 
-  var version = "0.17.17";
+  var version = "0.17.18";
 
   var History = {
     __history: [],
@@ -4195,10 +4195,7 @@
         default: filter
       },
       staticData: Object,
-      valueField: {
-        type: [String, Function],
-        default: 'value'
-      },
+      valueField: [String, Function],
       separator: Boolean
     },
     inject: {
@@ -10331,7 +10328,7 @@
           ]));
           var content$1 = [
             h('span', {
-              staticClass: 'col',
+              staticClass: 'col-auto',
               style: { textAlign: 'right' }
             }, [
               h('span', {
@@ -10368,7 +10365,7 @@
             h('span', { style: 'opacity:0.6;' }, [ ':' ]),
 
             h('span', {
-              staticClass: 'col row no-wrap items-center',
+              staticClass: 'col-auto row no-wrap items-center',
               style: { textAlign: 'left' }
             }, [
               h('span', {
@@ -11282,9 +11279,7 @@
           : 0
       },
       computedClearValue: function computedClearValue () {
-        return this.isNumber && this.clearValue === 0
-          ? this.clearValue
-          : this.clearValue || (this.isNumber ? null : '')
+        return this.clearValue === void 0 ? (this.isNumber ? null : '') : this.clearValue
       },
       computedStep: function computedStep () {
         return this.step || (this.decimals ? Math.pow( 10, -this.decimals ) : 'any')
@@ -17629,11 +17624,13 @@
         }));
       }
 
-      child.push(h(QIcon, {
-        slot: 'after',
-        staticClass: 'q-if-control',
-        props: { name: this.$q.icon.input.dropdown }
-      }));
+      child.push(
+        h(QIcon, this.readonly ? { slot: 'after' } : {
+          slot: 'after',
+          staticClass: 'q-if-control',
+          props: { name: this.$q.icon.input.dropdown }
+        })
+      );
 
       //FLOROSG todo make computed props?
       return h(QInputFrame, {
@@ -22233,17 +22230,15 @@
         staticClass: "q-timeline-entry",
         'class': this.classes
       }, [
-        h('div', { staticClass: 'q-timeline-subtitle' }, [
+        this.$slots.subtitle || h('div', { staticClass: 'q-timeline-subtitle' }, [
           h('span', this.subtitle)
         ]),
-
         h('div', {
           staticClass: 'q-timeline-dot',
           'class': this.colorClass
         }, [
           this.icon
             ? h(QIcon, {
-              staticClass: 'row items-center justify-center',
               props: { name: this.icon }
             })
             : null
@@ -22252,9 +22247,9 @@
         h(
           'div',
           { staticClass: 'q-timeline-content' },
-          [
+          (this.$slots.title || [
             h('h6', { staticClass: 'q-timeline-title' }, [ this.title ])
-          ].concat(this.$slots.default)
+          ]).concat(this.$slots.default)
         )
       ])
     }
