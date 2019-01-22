@@ -21,10 +21,7 @@ export default {
   },
   props: {
     type: String,
-    loading: {
-      type: Boolean,
-      default: null
-    },
+    loading: Boolean,
     disable: Boolean,
     label: [Number, String],
     noCaps: Boolean,
@@ -139,9 +136,8 @@ export default {
     },
     innerClasses () {
       const classes = [ this.alignClass ]
-      this.noWrap === true && classes.push('no-wrap', 'text-no-wrap')
-      this.repeating === true && classes.push('non-selectable')
-      this.loading === true && classes.push('q-btn-inner--hidden')
+      this.noWrap && classes.push('no-wrap', 'text-no-wrap')
+      this.repeating && classes.push('non-selectable')
       return classes
     }
   }
