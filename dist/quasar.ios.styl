@@ -1,5 +1,5 @@
 /*!
- * Quasar Framework v0.17.18
+ * Quasar Framework v0.17.19
  * (c) 2016-present Razvan Stoenescu
  * Released under the MIT License.
  */
@@ -948,8 +948,12 @@ input[type='search']::-webkit-search-decoration
   .q-icon, .q-spinner
     font-size 1.4em
   
-  .q-btn-inner:before
-    content ''
+  .q-btn-inner
+    transition opacity .6s
+    &--hidden
+      opacity 0
+    &:before
+      content ''
   &.disabled
     opacity .7 !important
 .q-btn-progress
@@ -1001,6 +1005,15 @@ input[type='search']::-webkit-search-decoration
 .q-btn-fab-mini
   height 40px
   width 40px
+.q-transition
+  &--fade
+    &-leave-active
+      position absolute
+  &--fade
+    &-enter-active, &-leave-active
+      transition opacity .4s ease-out
+    &-enter, &-leave, &-leave-to
+      opacity 0
 .q-btn-dropdown-split .q-btn-dropdown-arrow
   padding 0 4px
   border-left 1px solid rgba(255, 255, 255, .3)
@@ -1082,8 +1095,8 @@ input[type='search']::-webkit-search-decoration
   .q-btn
     padding 0 8px
 .q-card-actions-horiz
-  .q-btn + .q-btn
-    margin-left 8px
+  .q-btn:not(:last-child)
+    margin-right 8px
 .q-card-actions-vert
   .q-btn + .q-btn
     margin-top 4px
@@ -1951,6 +1964,7 @@ $margin-top-box
   visibility hidden
   height 0 !important
   white-space nowrap
+  max-width 100%
 .q-if-label
   cursor text
   max-width 100%
@@ -2012,6 +2026,7 @@ $margin-top-box
   width 0
   color transparent
 input.q-input-target
+  width 100% !important
   height $input-control-size
   outline 0
   display inline-block
@@ -5770,10 +5785,12 @@ ie_style = @block
       > .q-input-target
         flex-basis auto
       > input.q-input-target
-        min-width 6rem
+        min-width 3rem
         flex-basis 0% !important
   .q-input-target:before
     display block
+  .q-if-label-spacer
+    width 0
   
   .q-editor-toolbar
     .q-btn-group.row.inline

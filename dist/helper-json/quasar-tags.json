@@ -1084,6 +1084,7 @@
       "chips-color",
       "chips-bg-color",
       "display-value",
+      "popup-cover",
       "popup-max-height",
       "popup-class",
       "grid",

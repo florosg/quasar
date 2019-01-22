@@ -1,5 +1,5 @@
 /*!
- * Quasar Framework v0.17.18
+ * Quasar Framework v0.17.19
  * (c) 2016-present Razvan Stoenescu
  * Released under the MIT License.
  */
@@ -427,7 +427,7 @@
     });
   }
 
-  var version = "0.17.18";
+  var version = "0.17.19";
 
   var History = {
     __history: [],
@@ -2115,6 +2115,9 @@
         else if (icon.startsWith('bt-')) {
           cls = "bt " + icon;
         }
+        else if (icon.startsWith('eva-')) {
+          cls = "eva " + icon;
+        }
         else if (/^ion-(md|ios|logo)/.test(icon)) {
           cls = "ionicons " + icon;
         }
@@ -3064,7 +3067,10 @@
     },
     props: {
       type: String,
-      loading: Boolean,
+      loading: {
+        type: Boolean,
+        default: null
+      },
       disable: Boolean,
       label: [Number, String],
       noCaps: Boolean,
@@ -3179,8 +3185,9 @@
       },
       innerClasses: function innerClasses () {
         var classes = [ this.alignClass ];
-        this.noWrap && classes.push('no-wrap', 'text-no-wrap');
-        this.repeating && classes.push('non-selectable');
+        this.noWrap === true && classes.push('no-wrap', 'text-no-wrap');
+        this.repeating === true && classes.push('non-selectable');
+        this.loading === true && classes.push('q-btn-inner--hidden');
         return classes
       }
     }
@@ -3392,6 +3399,32 @@
       this.__cleanup();
     },
     render: function render (h) {
+      var inner = [].concat(this.$slots.default);
+
+      if (this.label !== void 0 && this.isRectangle === true) {
+        inner.unshift(
+          h('div', [this.label])
+        );
+      }
+
+      if (this.icon !== void 0) {
+        inner.unshift(
+          h(QIcon, {
+            class: { 'on-left': this.label !== void 0 && this.isRectangle === true },
+            props: { name: this.icon }
+          })
+        );
+      }
+
+      if (this.iconRight !== void 0 && this.isRound === false) {
+        inner.push(
+          h(QIcon, {
+            staticClass: 'on-right',
+            props: { name: this.iconRight }
+          })
+        );
+      }
+
       return h(this.isLink ? 'a' : 'button', {
         staticClass: 'q-btn inline relative-position q-btn-item non-selectable',
         'class': this.classes,
@@ -3419,31 +3452,20 @@
           : null,
 
         h('div', {
-          staticClass: 'q-btn-inner row col items-center',
+          staticClass: 'q-btn-inner row col items-center q-popup--skip',
           'class': this.innerClasses
-        },
-        this.loading
-          ? [ this.$slots.loading || h(QSpinner) ]
-          : [
-            this.icon
-              ? h(QIcon, {
-                'class': { 'on-left': this.label && this.isRectangle },
-                props: { name: this.icon }
-              })
-              : null,
+        }, inner),
 
-            this.label && this.isRectangle ? h('div', [this.getLabelValue(this.label) ]) : null,
-
-            this.$slots.default,
-
-            this.iconRight && this.isRectangle
-              ? h(QIcon, {
-                staticClass: 'on-right',
-                props: { name: this.iconRight }
-              })
-              : null
-          ]
-        )
+        this.loading !== null
+          ? h('transition', {
+            props: { name: 'q-transition--fade' }
+          }, this.loading === true ? [
+            h('div', {
+              key: 'loading',
+              staticClass: 'absolute-full flex flex-center'
+            }, this.$slots.loading !== void 0 ? this.$slots.loading : [h(QSpinner)])
+          ] : void 0)
+          : null
       ])
     }
   };
@@ -3856,8 +3878,7 @@
         this$1.anchorEl.removeChild(this$1.$el);
 
         if (
-          this$1.anchorEl.classList.contains('q-btn-inner') ||
-          this$1.anchorEl.classList.contains('q-if-inner') ||
+          this$1.anchorEl.classList.contains('q-popup--skip') ||
           this$1.anchorEl.classList.contains('no-pointer-events')
         ) {
           this$1.anchorEl = this$1.anchorEl.parentNode;
@@ -4232,7 +4253,7 @@
           : []
       },
       computedValueField: function computedValueField () {
-        return this.valueField || (this.staticData ? this.staticData.field : 'value')
+        return this.valueField || (this.staticData ? this.staticData.field || 'value' : 'value')
       },
       keyboardMaxIndex: function keyboardMaxIndex () {
         return this.computedResults.length - 1
@@ -4395,10 +4416,10 @@
       this.$nextTick(function () {
         if (this$1.__input) {
           this$1.inputEl = this$1.__input.getEl();
+          this$1.inputEl.addEventListener('keydown', this$1.__keyboardHandleKey);
+          this$1.inputEl.addEventListener('blur', this$1.blurHide);
+          this$1.inputEl.addEventListener('focus', this$1.__focusShowTrigger);
         }
-        this$1.inputEl.addEventListener('keydown', this$1.__keyboardHandleKey);
-        this$1.inputEl.addEventListener('blur', this$1.blurHide);
-        this$1.inputEl.addEventListener('focus', this$1.__focusShowTrigger);
       });
     },
     beforeDestroy: function beforeDestroy () {
@@ -4791,7 +4812,7 @@
           key: ("" + (opt.label) + (opt.icon) + (opt.iconRight)),
           on: { click: function () { return this$1.set(opt.value, opt); } },
           props: {
-            disable: this$1.disable,
+            disable: this$1.disable || opt.disable,
             label: opt.label,
             // Colors come from the button specific options first, then from general props
             color: this$1.val[i] ? opt.toggleColor || this$1.toggleColor : opt.color || this$1.color,
@@ -4942,28 +4963,24 @@
   };
 
   function getDirection (mod) {
-    if (!mod.horizontal && !mod.vertical) {
-      return {
-        horizontal: true,
-        vertical: true
-      }
+    var
+      none = mod.horizontal !== true && mod.vertical !== true,
+      dir = {};
+
+    if (mod.horizontal === true || none === true) {
+      dir.horizontal = true;
     }
-
-    var dir = {}
-
-    ;['horizontal', 'vertical'].forEach(function (direction) {
-      if (mod[direction]) {
-        dir[direction] = true;
-      }
-    });
+    if (mod.vertical === true || none === true) {
+      dir.vertical = true;
+    }
 
     return dir
   }
 
   function processChanges (evt, ctx, isFinal) {
     var
-      direction,
       pos = position(evt),
+      direction,
       distX = pos.left - ctx.event.x,
       distY = pos.top - ctx.event.y,
       absDistX = Math.abs(distX),
@@ -4987,11 +5004,15 @@
       position: pos,
       direction: direction,
       isFirst: ctx.event.isFirst,
-      isFinal: Boolean(isFinal),
+      isFinal: isFinal,
       duration: new Date().getTime() - ctx.event.time,
       distance: {
         x: absDistX,
         y: absDistY
+      },
+      offset: {
+        x: distX,
+        y: distY
       },
       delta: {
         x: pos.left - ctx.event.lastX,
@@ -5014,9 +5035,10 @@
 
   var TouchPan = {
     name: 'touch-pan',
+
     bind: function bind (el, binding) {
       var
-        mouse = !binding.modifiers.noMouse,
+        mouse = binding.modifiers.noMouse !== true,
         stopPropagation = binding.modifiers.stop,
         preventDefault = binding.modifiers.prevent,
         evtOpts = preventDefault || binding.modifiers.mightPrevent ? null : listenOpts.passive;
@@ -5029,23 +5051,24 @@
           if (leftClick(evt)) {
             document.addEventListener('mousemove', ctx.move, evtOpts);
             document.addEventListener('mouseup', ctx.mouseEnd, evtOpts);
-            ctx.start(evt);
+            ctx.start(evt, true);
           }
         },
+
         mouseEnd: function mouseEnd (evt) {
           document.removeEventListener('mousemove', ctx.move, evtOpts);
           document.removeEventListener('mouseup', ctx.mouseEnd, evtOpts);
           ctx.end(evt);
         },
 
-        start: function start (evt) {
+        start: function start (evt, mouseEvent) {
           var pos = position(evt);
 
           ctx.event = {
             x: pos.left,
             y: pos.top,
             time: new Date().getTime(),
-            detected: ctx.direction.horizontal && ctx.direction.vertical,
+            detected: mouseEvent === true || (ctx.direction.horizontal && ctx.direction.vertical),
             abort: false,
             isFirst: true,
             lastX: pos.left,
@@ -5054,16 +5077,21 @@
 
           if (ctx.event.detected) {
             el.classList.add('q-touch');
-            stopPropagation && evt.stopPropagation();
-            preventDefault && evt.preventDefault();
+
+            if (mouseEvent !== true) {
+              stopPropagation && evt.stopPropagation();
+              preventDefault && evt.preventDefault();
+              ctx.move(evt);
+            }
           }
         },
+
         move: function move (evt) {
-          if (ctx.event.abort) {
+          if (ctx.event.abort === true) {
             return
           }
 
-          if (ctx.event.detected) {
+          if (ctx.event.detected === true) {
             stopPropagation && evt.stopPropagation();
             preventDefault && evt.preventDefault();
 
@@ -5094,6 +5122,7 @@
 
           ctx.move(evt);
         },
+
         end: function end (evt) {
           el.classList.remove('q-touch');
           if (ctx.event.abort || !ctx.event.detected || ctx.event.isFirst) {
@@ -5106,6 +5135,10 @@
         }
       };
 
+      if (el.__qtouchpan) {
+        el.__qtouchpan_old = el.__qtouchpan;
+      }
+
       el.__qtouchpan = ctx;
 
       if (mouse) {
@@ -5115,23 +5148,39 @@
       el.addEventListener('touchmove', ctx.move, evtOpts);
       el.addEventListener('touchend', ctx.end, evtOpts);
     },
-    update: function update (el, binding) {
-      if (binding.oldValue !== binding.value) {
-        el.__qtouchpan.handler = binding.value;
+
+    update: function update (el, ref) {
+      var oldValue = ref.oldValue;
+      var value = ref.value;
+      var modifiers = ref.modifiers;
+
+      var ctx = el.__qtouchpan;
+
+      if (oldValue !== value) {
+        ctx.handler = value;
+      }
+
+      if (
+        (modifiers.horizontal !== ctx.direction.horizontal) ||
+        (modifiers.vertical !== ctx.direction.vertical)
+      ) {
+        ctx.direction = getDirection(modifiers);
       }
     },
+
     unbind: function unbind (el, binding) {
-      var ctx = el.__qtouchpan;
-      if (!ctx) { return }
-      var evtOpts = binding.modifiers.prevent ? null : listenOpts.passive;
+      var ctx = el.__qtouchpan_old || el.__qtouchpan;
+      if (ctx !== void 0) {
+        var evtOpts = binding.modifiers.prevent ? null : listenOpts.passive;
 
-      el.removeEventListener('mousedown', ctx.mouseStart, evtOpts);
+        el.removeEventListener('mousedown', ctx.mouseStart, evtOpts);
 
-      el.removeEventListener('touchstart', ctx.start, evtOpts);
-      el.removeEventListener('touchmove', ctx.move, evtOpts);
-      el.removeEventListener('touchend', ctx.end, evtOpts);
+        el.removeEventListener('touchstart', ctx.start, evtOpts);
+        el.removeEventListener('touchmove', ctx.move, evtOpts);
+        el.removeEventListener('touchend', ctx.end, evtOpts);
 
-      delete el.__qtouchpan;
+        delete el[el.__qtouchpan_old ? '__qtouchpan_old' : '__qtouchpan'];
+      }
     }
   };
 
@@ -5141,6 +5190,10 @@
 
   function isNumber (v) {
     return typeof v === 'number' && isFinite(v)
+  }
+
+  function isString (v) {
+    return typeof v === 'string'
   }
 
   var linear = function (t) { return t; };
@@ -6549,7 +6602,7 @@
           ])
           : null,
 
-        h('div', { staticClass: 'q-chip-main ellipsis' }, this.$slots.default),
+        h('div', { staticClass: 'q-chip-main ellipsis q-popup--skip' }, this.$slots.default),
 
         this.iconRight
           ? h(QIcon, {
@@ -6946,7 +6999,7 @@
         })) || void 0,
 
         h('div', {
-          staticClass: 'q-if-inner col column'
+          staticClass: 'q-if-inner col column q-popup--skip'
         }, [
           h('div', { staticClass: 'row no-wrap relative-position' }, [
             (this.prefix && h('span', {
@@ -9073,7 +9126,8 @@
     MILLISECONDS_IN_DAY = 86400000,
     MILLISECONDS_IN_HOUR = 3600000,
     MILLISECONDS_IN_MINUTE = 60000,
-    token = /\[((?:[^\]\\]|\\]|\\)*)\]|d{1,4}|M{1,4}|m{1,2}|w{1,2}|Qo|Do|D{1,4}|YY(?:YY)?|H{1,2}|h{1,2}|s{1,2}|S{1,3}|Z{1,2}|a{1,2}|[AQExX]/g;
+    token = /\[((?:[^\]\\]|\\]|\\)*)\]|d{1,4}|M{1,4}|m{1,2}|w{1,2}|Qo|Do|D{1,4}|YY(?:YY)?|H{1,2}|h{1,2}|s{1,2}|S{1,3}|Z{1,2}|a{1,2}|[AQExX]/g,
+    reMySQLDateTimeStr = /^[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}:[0-9]{2}(.[0-9]{6})?$/;
 
   function formatTimezone (offset, delimeter) {
     if ( delimeter === void 0 ) delimeter = '';
@@ -9095,9 +9149,13 @@
     date.setMonth(newMonth - 1, Math.min(days, date.getDate()));
   }
 
+  function buildDateVal (d) {
+    return new Date(isString(d) && reMySQLDateTimeStr.exec(d) !== null ? d.substring(0, 23).replace(' ', 'T') : d)
+  }
+
   function getChange (date, mod, add) {
     var
-      t = new Date(date),
+      t = buildDateVal(date),
       sign = (add ? 1 : -1);
 
     Object.keys(mod).forEach(function (key) {
@@ -9127,7 +9185,7 @@
   }
 
   function getDayOfWeek (date) {
-    var dow = new Date(date).getDay();
+    var dow = buildDateVal(date).getDay();
     return dow === 0 ? 7 : dow
   }
 
@@ -9157,9 +9215,9 @@
     if ( opts === void 0 ) opts = {};
 
     var
-      d1 = new Date(from).getTime(),
-      d2 = new Date(to).getTime(),
-      cur = new Date(date).getTime();
+      d1 = buildDateVal(from).getTime(),
+      d2 = buildDateVal(to).getTime(),
+      cur = buildDateVal(date).getTime();
 
     opts.inclusiveFrom && d1--;
     opts.inclusiveTo && d2++;
@@ -9176,7 +9234,7 @@
 
   function adjustDate (date, mod, utc) {
     var
-      t = new Date(date),
+      t = buildDateVal(date),
       prefix = "set" + (utc ? 'UTC' : '');
 
     Object.keys(mod).forEach(function (key) {
@@ -9194,7 +9252,7 @@
   }
 
   function startOfDate (date, unit) {
-    var t = new Date(date);
+    var t = buildDateVal(date);
     switch (unit) {
       case 'year':
         t.setMonth(0);
@@ -9213,7 +9271,7 @@
   }
 
   function endOfDate (date, unit) {
-    var t = new Date(date);
+    var t = buildDateVal(date);
     switch (unit) {
       case 'year':
         t.setMonth(11);
@@ -9235,9 +9293,9 @@
     var args = [], len = arguments.length - 1;
     while ( len-- > 0 ) args[ len ] = arguments[ len + 1 ];
 
-    var t = new Date(date);
+    var t = buildDateVal(date);
     args.forEach(function (d) {
-      t = Math.max(t, new Date(d));
+      t = Math.max(t, buildDateVal(d));
     });
     return t
   }
@@ -9245,9 +9303,9 @@
     var args = [], len = arguments.length - 1;
     while ( len-- > 0 ) args[ len ] = arguments[ len + 1 ];
 
-    var t = new Date(date);
+    var t = buildDateVal(date);
     args.forEach(function (d) {
-      t = Math.min(t, new Date(d));
+      t = Math.min(t, buildDateVal(d));
     });
     return t
   }
@@ -9263,8 +9321,8 @@
     if ( unit === void 0 ) unit = 'days';
 
     var
-      t = new Date(date),
-      sub = new Date(subtract);
+      t = buildDateVal(date),
+      sub = buildDateVal(subtract);
 
     switch (unit) {
       case 'years':
@@ -9318,17 +9376,17 @@
   }
 
   function getDateBetween (date, min, max) {
-    var t = new Date(date);
+    var t = buildDateVal(date);
 
     if (min) {
-      var low = new Date(min);
+      var low = buildDateVal(min);
       if (t < low) {
         return low
       }
     }
 
     if (max) {
-      var high = new Date(max);
+      var high = buildDateVal(max);
       if (t > high) {
         return high
       }
@@ -9339,8 +9397,8 @@
 
   function isSameDate (date, date2, unit) {
     var
-      t = new Date(date),
-      d = new Date(date2);
+      t = buildDateVal(date),
+      d = buildDateVal(date2);
 
     if (unit === void 0) {
       return t.getTime() === d.getTime()
@@ -9417,13 +9475,17 @@
     },
 
     // Month Short Name: Jan, Feb, ...
-    MMM: function MMM (date) {
-      return i18n.lang.date.monthsShort[date.getMonth()]
+    MMM: function MMM (date, opts) {
+      if ( opts === void 0 ) opts = {};
+
+      return (opts.monthNamesShort || i18n.lang.date.monthsShort)[date.getMonth()]
     },
 
     // Month Name: January, February, ...
-    MMMM: function MMMM (date) {
-      return i18n.lang.date.months[date.getMonth()]
+    MMMM: function MMMM (date, opts) {
+      if ( opts === void 0 ) opts = {};
+
+      return (opts.monthNames || i18n.lang.date.months)[date.getMonth()]
     },
 
     // Quarter: 1, 2, 3, 4
@@ -9472,13 +9534,17 @@
     },
 
     // Day of week: Sun, Mon, ...
-    ddd: function ddd (date) {
-      return i18n.lang.date.daysShort[date.getDay()]
+    ddd: function ddd (date, opts) {
+      if ( opts === void 0 ) opts = {};
+
+      return (opts.dayNamesShort || i18n.lang.date.daysShort)[date.getDay()]
     },
 
     // Day of week: Sunday, Monday, ...
-    dddd: function dddd (date) {
-      return i18n.lang.date.days[date.getDay()]
+    dddd: function dddd (date, opts) {
+      if ( opts === void 0 ) opts = {};
+
+      return (opts.dayNames || i18n.lang.date.days)[date.getDay()]
     },
 
     // Day of ISO week: 1, 2, ..., 7
@@ -9594,18 +9660,18 @@
     }
   };
 
-  function formatDate (val, mask) {
+  function formatDate (val, mask, opts) {
     if ( mask === void 0 ) mask = 'YYYY-MM-DDTHH:mm:ss.SSSZ';
 
     if (val !== 0 && !val) {
       return
     }
 
-    var date = new Date(val);
+    var date = buildDateVal(val);
 
     return mask.replace(token, function (match, text) {
       if (match in formatter) {
-        return formatter[match](date)
+        return formatter[match](date, opts)
       }
       return text === void 0
         ? match
@@ -10105,8 +10171,8 @@
 
         var
           el = this.$refs.selector,
-          itemInactive = el.querySelector('.q-btn:not(.active)'),
-          itemActive = el.querySelector('.q-btn.active'),
+          itemInactive = el ? el.querySelector('.q-btn:not(.active)') : null,
+          itemActive = el ? el.querySelector('.q-btn.active') : null,
           viewHeight = el ? el.offsetHeight : 0;
 
         this.$nextTick(function () {
@@ -12204,8 +12270,7 @@
         this$1.anchorEl = this$1.$el.parentNode;
         this$1.anchorEl.removeChild(this$1.$el);
         if (
-          this$1.anchorEl.classList.contains('q-btn-inner') ||
-          this$1.anchorEl.classList.contains('q-if-inner') ||
+          this$1.anchorEl.classList.contains('q-popup--skip') ||
           this$1.anchorEl.classList.contains('no-pointer-events')
         ) {
           this$1.anchorEl = this$1.anchorEl.parentNode;
@@ -12706,9 +12771,13 @@
       if ( done === void 0 ) done = function () {};
 
     if (cmd === 'formatBlock') {
-      if (['BLOCKQUOTE', 'H1', 'H2', 'H3', 'H4', 'H5', 'H6', 'PRE'].includes(param) && this.is(cmd, param)) {
+      if (['BLOCKQUOTE', 'H1', 'H2', 'H3', 'H4', 'H5', 'H6'].includes(param) && this.is(cmd, param)) {
         cmd = 'outdent';
         param = null;
+      }
+
+      if (param === 'PRE' && this.is(cmd, 'PRE')) {
+        param = 'P';
       }
     }
     else if (cmd === 'print') {
@@ -13608,8 +13677,10 @@
         this.index = 0;
       },
       resume: function resume () {
-        this.working = true;
-        this.scrollContainer.addEventListener('scroll', this.poll, listenOpts.passive);
+        if (this.working !== true) {
+          this.working = true;
+          this.scrollContainer.addEventListener('scroll', this.poll, listenOpts.passive);
+        }
         this.immediatePoll();
       },
       stop: function stop () {
@@ -13625,13 +13696,14 @@
         this$1.element = this$1.$refs.content;
 
         this$1.scrollContainer = this$1.inline ? this$1.$el : getScrollTarget(this$1.$el);
-        if (this$1.working) {
-          this$1.scrollContainer.addEventListener('scroll', this$1.poll, listenOpts.passive);
-        }
 
         this$1.poll();
         this$1.immediatePoll = this$1.poll;
         this$1.poll = debounce(this$1.poll, 50);
+
+        if (this$1.working === true) {
+          this$1.scrollContainer.addEventListener('scroll', this$1.poll, listenOpts.passive);
+        }
       });
     },
     beforeDestroy: function beforeDestroy () {
@@ -17172,6 +17244,10 @@
       chipsColor: String,
       chipsBgColor: String,
       displayValue: String,
+      popupCover: {
+        type: Boolean,
+        default: true
+      },
       popupMaxHeight: String,
       popupClass: String,
       grid: {
@@ -17520,7 +17596,7 @@
         staticClass: ((this.popupClass || '') + "  column no-wrap"),
         'class': this.dark ? 'bg-dark' : null,
         props: {
-          cover: true,
+          cover: this.popupCover,
           keepOnScreen: true,
           disable: !this.editable,
           anchorClick: false,
@@ -24343,19 +24419,25 @@
   function set (key, val, opts, ssr) {
     if ( opts === void 0 ) opts = {};
 
-    var time = opts.expires;
-    var hasExpire = typeof opts.expires === 'number';
+    var expire, expireValue;
 
-    if (hasExpire) {
-      time = new Date();
-      time.setMilliseconds(time.getMilliseconds() + opts.expires * 864e+5);
+    if (opts.expires !== void 0) {
+      expireValue = parseInt(opts.expires, 10);
+
+      if (isNaN(expireValue)) {
+        console.error('Quasar cookie: expires needs to be a number');
+        return
+      }
+
+      expire = new Date();
+      expire.setMilliseconds(expire.getMilliseconds() + expireValue * 864e+5);
     }
 
     var keyValue = (encode(key)) + "=" + (stringifyCookieValue(val));
 
     var cookie = [
       keyValue,
-      time ? '; Expires=' + time.toUTCString() : '', // use expires attribute, max-age is not supported by IE
+      expire !== void 0 ? '; Expires=' + expire.toUTCString() : '', // use expires attribute, max-age is not supported by IE
       opts.path ? '; Path=' + opts.path : '',
       opts.domain ? '; Domain=' + opts.domain : '',
       opts.httpOnly ? '; HttpOnly' : '',
@@ -24377,7 +24459,7 @@
 
       var all = ssr.req.headers.cookie || '';
 
-      if (hasExpire && opts.expires < 0) {
+      if (expire !== void 0 && expireValue < 0) {
         var val$1 = get(key, ssr);
         if (val$1 !== undefined) {
           all = all

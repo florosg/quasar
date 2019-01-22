@@ -1,5 +1,5 @@
 /*
- * Quasar Framework v0.17.18
+ * Quasar Framework v0.17.19
  * (c) 2016-present Razvan Stoenescu
  * Released under the MIT License.
  */
@@ -321,6 +321,15 @@ a.q-btn {
 .q-btn .q-spinner {
   font-size: 1.4em;
 }
+.q-btn .q-btn-inner {
+  transition: opacity 0.6s;
+}
+[dir] .q-btn .q-btn-inner {
+  -webkit-transition: opacity 0.6s;
+}
+.q-btn .q-btn-inner--hidden {
+  opacity: 0;
+}
 .q-btn .q-btn-inner:before {
   content: '';
 }
@@ -449,6 +458,21 @@ a.q-btn {
 .q-btn-fab-mini {
   height: 40px;
   width: 40px;
+}
+.q-transition--fade-leave-active {
+  position: absolute;
+}
+.q-transition--fade-enter-active,
+.q-transition--fade-leave-active {
+  transition: opacity 0.4s ease-out;
+}
+[dir] .q-transition--fade-enter-active, [dir] .q-transition--fade-leave-active {
+  -webkit-transition: opacity 0.4s ease-out;
+}
+.q-transition--fade-enter,
+.q-transition--fade-leave,
+.q-transition--fade-leave-to {
+  opacity: 0;
 }
 [dir] .q-btn-dropdown-split .q-btn-dropdown-arrow {
   padding: 0 4px;
@@ -632,11 +656,11 @@ a.q-btn {
 [dir] .q-card-actions .q-btn {
   padding: 0 8px;
 }
-[dir=ltr] .q-card-actions-horiz .q-btn + .q-btn {
-  margin-left: 8px;
-}
-[dir=rtl] .q-card-actions-horiz .q-btn + .q-btn {
+[dir=ltr] .q-card-actions-horiz .q-btn:not(:last-child) {
   margin-right: 8px;
+}
+[dir=rtl] .q-card-actions-horiz .q-btn:not(:last-child) {
+  margin-left: 8px;
 }
 [dir] .q-card-actions-vert .q-btn + .q-btn {
   margin-top: 4px;
@@ -2564,6 +2588,7 @@ body.desktop .q-datetime-dark .q-datetime-clock-position:not(.active):hover {
   visibility: hidden;
   height: 0 !important;
   white-space: nowrap;
+  max-width: 100%;
 }
 .q-if-label {
   max-width: 100%;
@@ -2666,6 +2691,7 @@ body.desktop .q-datetime-dark .q-datetime-clock-position:not(.active):hover {
   color: transparent;
 }
 input.q-input-target {
+  width: 100% !important;
   height: 24px;
   outline: 0;
   display: inline-block;
@@ -11201,12 +11227,15 @@ body.ios .q-hoverable:active .q-focus-helper {
         flex-basis: auto;
   }
   .q-if > .q-if-inner > div > input.q-input-target {
-    min-width: 6rem;
+    min-width: 3rem;
     -ms-flex-preferred-size: 0% !important;
         flex-basis: 0% !important;
   }
   .q-input-target:before {
     display: block;
+  }
+  .q-if-label-spacer {
+    width: 0;
   }
   .q-editor-toolbar .q-btn-group.row.inline {
     display: block;
@@ -11298,12 +11327,15 @@ body.ios .q-hoverable:active .q-focus-helper {
         flex-basis: auto;
   }
   .q-if > .q-if-inner > div > input.q-input-target {
-    min-width: 6rem;
+    min-width: 3rem;
     -ms-flex-preferred-size: 0% !important;
         flex-basis: 0% !important;
   }
   .q-input-target:before {
     display: block;
+  }
+  .q-if-label-spacer {
+    width: 0;
   }
   .q-editor-toolbar .q-btn-group.row.inline {
     display: block;

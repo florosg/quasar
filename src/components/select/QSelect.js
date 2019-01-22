@@ -46,11 +46,10 @@ export default {
     chipsColor: String,
     chipsBgColor: String,
     displayValue: String,
-    popupMaxHeight: String,
     popupCover: {
       type: Boolean,
       default: true
-    }
+    },
     popupMaxHeight: String,
     popupClass: String,
     grid: {

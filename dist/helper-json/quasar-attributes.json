@@ -2819,6 +2819,10 @@
     "type": "string",
     "description": "String value."
   },
+  "q-select/popup-cover": {
+    "type": "boolean",
+    "description": "Boolean value."
+  },
   "q-select/popup-max-height": {
     "type": "string",
     "description": "String value."
