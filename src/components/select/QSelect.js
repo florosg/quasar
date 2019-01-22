@@ -47,6 +47,11 @@ export default {
     chipsBgColor: String,
     displayValue: String,
     popupMaxHeight: String,
+    popupCover: {
+      type: Boolean,
+      default: true
+    }
+    popupMaxHeight: String,
     popupClass: String,
     grid: {
       type: Boolean,
@@ -376,7 +381,7 @@ export default {
       staticClass: `${this.popupClass || ''}  column no-wrap`,
       'class': this.dark ? 'bg-dark' : null,
       props: {
-        cover: true,
+        cover: this.popupCover,
         keepOnScreen: true,
         disable: !this.editable,
         anchorClick: false,
