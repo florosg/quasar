@@ -49,7 +49,8 @@ export default {
       letter: this.getLabelValue(cfg.letter),
       image: cfg.image,
       inverted: cfg.leftInverted,
-      textColor: cfg.leftTextColor
+      textColor: cfg.leftTextColor,
+      defaultImage: cfg.defaultImage
     })
 
     push(child, h, QItemMain, this.$slots.main, replace, {
@@ -69,7 +70,8 @@ export default {
       image: cfg.rightImage,
       stamp: this.getLabelValue(cfg.stamp),
       inverted: cfg.rightInverted,
-      textColor: cfg.rightTextColor
+      textColor: cfg.rightTextColor,
+      defaultImage: cfg.rightDefaultImage
     })
 
     child.push(this.$slots.default)

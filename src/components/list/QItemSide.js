@@ -15,7 +15,7 @@ export default {
     avatar: String,
     image: String,
     stamp: String,
-
+    defaultImage: String,
     color: String,
     textColor: String // only for inverted icon/letter
   },
@@ -54,6 +54,7 @@ export default {
       return cls
     },
     imagePath () {
+
       return this.image || this.avatar
     }
   },
@@ -74,9 +75,30 @@ export default {
         }
       }
       else if (this.imagePath) {
+
         child = h('img', {
           'class': this.typeClasses,
-          attrs: { src: this.imagePath }
+          attrs: { src: this.imagePath },
+          on: {
+            error: () => {
+              if(this.defaultImage && (this.avatar === this.defaultImage || this.image === this.defaultImage)) //second try failed also
+               {
+                 this.image = undefined
+                 this.avatar = undefined
+                 this.defaultImage = undefined
+                 return
+              }
+
+              if(this.defaultImage) {
+                this.image = this.image ? this.defaultImage : undefined
+                this.avatar = this.avatar ? this.defaultImage : undefined
+                return
+              }
+
+              this.image = undefined
+              this.avatar = undefined
+            }
+          }
         })
       }
       else {

@@ -2352,7 +2352,7 @@
       avatar: String,
       image: String,
       stamp: String,
-
+      defaultImage: String,
       color: String,
       textColor: String // only for inverted icon/letter
     },
@@ -2393,10 +2393,13 @@
         return cls
       },
       imagePath: function imagePath () {
+
         return this.image || this.avatar
       }
     },
     render: function render (h) {
+      var this$1 = this;
+
       var child;
 
       if (this.type) {
@@ -2413,9 +2416,30 @@
           }
         }
         else if (this.imagePath) {
+
           child = h('img', {
             'class': this.typeClasses,
-            attrs: { src: this.imagePath }
+            attrs: { src: this.imagePath },
+            on: {
+              error: function () {
+                if(this$1.defaultImage && (this$1.avatar === this$1.defaultImage || this$1.image === this$1.defaultImage)) //second try failed also
+                 {
+                   this$1.image = undefined;
+                   this$1.avatar = undefined;
+                   this$1.defaultImage = undefined;
+                   return
+                }
+
+                if(this$1.defaultImage) {
+                  this$1.image = this$1.image ? this$1.defaultImage : undefined;
+                  this$1.avatar = this$1.avatar ? this$1.defaultImage : undefined;
+                  return
+                }
+
+                this$1.image = undefined;
+                this$1.avatar = undefined;
+              }
+            }
           });
         }
         else {
@@ -4048,7 +4072,8 @@
         letter: this.getLabelValue(cfg.letter),
         image: cfg.image,
         inverted: cfg.leftInverted,
-        textColor: cfg.leftTextColor
+        textColor: cfg.leftTextColor,
+        defaultImage: cfg.defaultImage
       });
 
       push(child, h, QItemMain, this.$slots.main, replace, {
@@ -4068,7 +4093,8 @@
         image: cfg.rightImage,
         stamp: this.getLabelValue(cfg.stamp),
         inverted: cfg.rightInverted,
-        textColor: cfg.rightTextColor
+        textColor: cfg.rightTextColor,
+        defaultImage: cfg.rightDefaultImage
       });
 
       child.push(this.$slots.default);

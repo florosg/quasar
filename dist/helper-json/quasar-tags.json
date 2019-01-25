@@ -757,6 +757,7 @@
       "avatar",
       "image",
       "stamp",
+      "default-image",
       "color",
       "text-color"
     ],
