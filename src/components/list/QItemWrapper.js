@@ -40,7 +40,8 @@ export default {
       cfg = this.cfg,
       replace = this.slotReplace,
       child = []
-
+      this.$slots.before &&
+       child.push(h('div', {staticClass: 'q-item-before q-mr-sm'}, this.$slots.before))
     push(child, h, QItemSide, this.$slots.left, replace, {
       icon: cfg.icon,
       color: cfg.leftColor,
@@ -72,6 +73,9 @@ export default {
     })
 
     child.push(this.$slots.default)
+
+    this.$slots.after &&
+      child.push(h('div', {staticClass: 'q-item-after q-ml-sm'}, this.$slots.after))
 
     return h(QItem, {
       attrs: this.$attrs,

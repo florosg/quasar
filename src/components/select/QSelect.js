@@ -439,7 +439,7 @@ export default {
           ],
           props: {
             cfg: opt,
-            slotReplace: true,
+            slotReplace: false,
             active: this.multiple ? void 0 : this.value === opt.value
           },
           nativeOn: {
@@ -454,7 +454,7 @@ export default {
         }, [
           this.multiple
             ? h(this.toggle ? QToggle : QCheckbox, {
-              slot: this.toggle ? 'right' : 'left',
+              slot: this.toggle ? 'after' : 'before',
               props: {
                 keepColor: true,
                 color: opt.color || this.color,
@@ -465,7 +465,7 @@ export default {
               }
             })
             : (this.radio && h(QRadio, {
-              slot: 'left',
+              slot: 'before',
               props: {
                 keepColor: true,
                 color: opt.color || this.color,

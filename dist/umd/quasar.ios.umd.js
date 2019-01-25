@@ -4254,7 +4254,8 @@
         cfg = this.cfg,
         replace = this.slotReplace,
         child = [];
-
+        this.$slots.before &&
+         child.push(h('div', {staticClass: 'q-item-before q-mr-sm'}, this.$slots.before));
       push(child, h, QItemSide, this.$slots.left, replace, {
         icon: cfg.icon,
         color: cfg.leftColor,
@@ -4286,6 +4287,9 @@
       });
 
       child.push(this.$slots.default);
+
+      this.$slots.after &&
+        child.push(h('div', {staticClass: 'q-item-after q-ml-sm'}, this.$slots.after));
 
       return h(QItem, {
         attrs: this.$attrs,
@@ -17289,7 +17293,7 @@
             ],
             props: {
               cfg: opt,
-              slotReplace: true,
+              slotReplace: false,
               active: this$1.multiple ? void 0 : this$1.value === opt.value
             },
             nativeOn: {
@@ -17304,7 +17308,7 @@
           }, [
             this$1.multiple
               ? h(this$1.toggle ? QToggle : QCheckbox, {
-                slot: this$1.toggle ? 'right' : 'left',
+                slot: this$1.toggle ? 'after' : 'before',
                 props: {
                   keepColor: true,
                   color: opt.color || this$1.color,
@@ -17315,7 +17319,7 @@
                 }
               })
               : (this$1.radio && h(QRadio, {
-                slot: 'left',
+                slot: 'before',
                 props: {
                   keepColor: true,
                   color: opt.color || this$1.color,
